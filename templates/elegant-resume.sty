@@ -1,11 +1,12 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{elegant-resume}[2026/05/24 Minimal two-column resume style]
+\ProvidesPackage{elegant-resume}[2026/05/25 Minimal two-column resume style]
 
 \RequirePackage[a4paper,top=1.2cm,bottom=1.2cm,left=1.05cm,right=1.05cm]{geometry}
 \RequirePackage{enumitem}
 \RequirePackage{xcolor}
 \RequirePackage{hyperref}
 \RequirePackage{fontspec}
+\RequirePackage{xeCJK}
 \RequirePackage{tikz}
 \RequirePackage{paracol}
 \RequirePackage{eso-pic}
@@ -23,11 +24,12 @@
 \definecolor{textgray}{HTML}{3F3F3F}
 \definecolor{muted}{HTML}{727272}
 \definecolor{tagbg}{HTML}{E9E9E7}
+\definecolor{accent}{HTML}{000000}
 
 \hypersetup{
   colorlinks=true,
-  linkcolor=black,
-  urlcolor=black
+  linkcolor=accent,
+  urlcolor=accent
 }
 
 \pagestyle{empty}
@@ -36,67 +38,80 @@
 \setlength{\columnsep}{1.7cm}
 \columnratio{0.19}
 
+% Spacing tokens — adjust these to tune the overall rhythm
+\newlength{\ResSectionSep} \setlength{\ResSectionSep}{8pt}  % divider line → section title
+\newlength{\ResItemSep}    \setlength{\ResItemSep}{6pt}     % between items / before divider line
+\newlength{\ResInnerSep}   \setlength{\ResInnerSep}{4pt}    % within an item between sub-elements
+
 \AddToShipoutPictureBG{%
   \begin{tikzpicture}[remember picture,overlay]
-    \fill[white] (current page.south west) rectangle (current page.north east);
-    \fill[sidebg] (current page.south west) rectangle ([xshift=.254\paperwidth]current page.north west);
+    \fill[sidebg] (current page.south west)
+      rectangle ([xshift=.254\paperwidth]current page.north west);
   \end{tikzpicture}%
 }
 
+% Short decorative underline used beneath section titles
 \newcommand{\rulemark}{%
-  \vspace{1pt}{\color{black}\rule{0.34cm}{1.8pt}}\par\vspace{7pt}
+  \vspace{1pt}{\color{accent}\rule{0.34cm}{1.8pt}}\par\vspace{7pt}%
 }
 
+% Thin rule between side-column sections
 \newcommand{\sideRule}{%
-  \vspace{3pt}{\color{linegray}\rule{\linewidth}{0.45pt}}\vspace{12pt}
+  \par\vspace{3pt}{\color{linegray}\rule{\linewidth}{0.45pt}}\par\vspace{10pt}%
 }
 
+% Heavier rule between main-column sections (also embedded in \mainSection)
+\newcommand{\mainDivider}{%
+  \par\vspace{\ResItemSep}%
+  {\color{linegray}\rule{\linewidth}{0.55pt}}\par
+  \vspace{\ResInnerSep}%
+}
+
+% Light rule appended automatically by \projectItem and \datedItem
+\newcommand{\projectDivider}{%
+  \par\vspace{\ResItemSep}%
+  {\color{linegray}\rule{\linewidth}{0.4pt}}\par
+  \vspace{\ResInnerSep}%
+}
+
+% Side-column section — \sideRule is prepended automatically
 \newcommand{\sideSection}[2]{%
   \sideRule
   {\large\bfseries #1}\par
-  \vspace{6pt}
+  \vspace{\ResInnerSep}%
   {\small\linespread{1.32}\selectfont #2}\par
 }
 
+% Main-column section with automatic leading divider line.
+% Use \firstMainSection for the very first section (no divider above).
 \newcommand{\mainSection}[1]{%
-  \vspace{14pt}
+  \vspace{\dimexpr\ResItemSep+\ResSectionSep\relax}%
   \noindent\begin{minipage}{\linewidth}
     {\Large\bfseries #1}\par
     \vspace{-1pt}
-    {\color{black}\rule{0.34cm}{1.8pt}}\par
+    {\color{accent}\rule{0.34cm}{1.8pt}}\par
   \end{minipage}\par
-  \vspace{7pt}
+  \vspace{7pt}%
 }
 
+% First main-column section — no divider above, no leading vspace
 \newcommand{\firstMainSection}[1]{%
   \noindent\begin{minipage}{\linewidth}
     {\Large\bfseries #1}\par
     \vspace{-1pt}
-    {\color{black}\rule{0.34cm}{1.8pt}}\par
+    {\color{accent}\rule{0.34cm}{1.8pt}}\par
   \end{minipage}\par
-  \vspace{7pt}
+  \vspace{7pt}%
 }
 
-\newcommand{\mainDivider}{%
-  \par\vspace{6pt}%
-  {\color{linegray}\rule{\linewidth}{0.55pt}}\par
-  \vspace{4pt}%
-}
-
+% Plain paragraph body text
 \newcommand{\bodyText}[1]{%
-  {\small
-   \setlength{\parindent}{0pt}%
-   \linespread{1.32}\selectfont
-   #1\par}%
+  {\small\linespread{1.32}\selectfont #1\par}%
 }
 
-\newcommand{\projectDivider}{%
-  \par\vspace{5pt}%
-  {\color{linegray}\rule{\linewidth}{0.4pt}}\par
-  \vspace{2pt}%
-}
-
-\newcommand{\tag}[1]{%
+% Inline rounded tag chip
+% Named \resumeTag to avoid conflict with \tag in amsmath
+\newcommand{\resumeTag}[1]{%
   \tikz[baseline=(x.base)]\node[
     inner xsep=7pt,
     inner ysep=2pt,
@@ -107,65 +122,80 @@
   ] (x) {#1};%
 }
 
+% Placeholder rectangle when no photo is available
 \newcommand{\photoPlaceholder}{%
   \begin{tikzpicture}
-    \fill[white] (0,0) rectangle (\linewidth,3.65);
-    \draw[linegray] (0,0) rectangle (\linewidth,3.65);
-    \node[text=muted] at (.5\linewidth,1.825) {\small 照片位置};
-  \end{tikzpicture}
+    \fill[white] (0,0) rectangle (\linewidth,3.65cm);
+    \draw[linegray] (0,0) rectangle (\linewidth,3.65cm);
+    \node[text=muted] at (.5\linewidth,1.825cm) {\small 照片位置};
+  \end{tikzpicture}%
 }
 
+% Profile block at the top of the side column
+% #1 name  #2 target role  #3 short tagline (pass {} if unused)
 \newcommand{\profileHeader}[3]{%
-  \vspace{18pt}
+  \vspace{18pt}%
   {\LARGE\bfseries #1}\par
-  \vspace{9pt}
+  \vspace{10pt}%
   {\large\bfseries #2}\par
-  \vspace{10pt}
+  \vspace{8pt}%
   {\small\linespread{1.32}\selectfont #3}\par
 }
 
+% Project card: two-column layout with a tags row
+% #1 title  #2 description  #3 tags  #4 right-col label  #5 right-col value
 \newcommand{\projectItem}[5]{%
   \noindent
   \begin{minipage}[t]{0.76\linewidth}
     {\large\bfseries #1}\par
-    \vspace{4pt}
+    \vspace{\ResInnerSep}%
     {\small\linespread{1.32}\selectfont #2}\par
-    \vspace{5pt}
-    #3\par\vspace{3pt}
-  \end{minipage}
+    \vspace{5pt}%
+    #3\par\vspace{3pt}%
+  \end{minipage}%
   \hfill
   \begin{minipage}[t]{0.18\linewidth}
-    \vspace{2pt}
+    \vspace{2pt}%
     {\small #4}\par
-    \vspace{11pt}
+    \vspace{\ResInnerSep}%
     {\small #5}\par
-  \end{minipage}
+  \end{minipage}%
   \projectDivider
 }
 
+% Experience / education entry with date aligned to the right
+% #1 title  #2 date range  #3 one-line summary  #4 bullet list (tightBullets env)
 \newcommand{\datedItem}[4]{%
   \begin{tabularx}{\linewidth}{@{}X r@{}}
     {\large\bfseries #1} & {\small #2}
   \end{tabularx}\par
-  \vspace{8pt}
-  {\small\linespread{1.32}\selectfont #3\par}
-  \vspace{3pt}
-  #4
-  \vspace{6pt}
+  \vspace{\ResItemSep}%
+  {\small\linespread{1.32}\selectfont #3\par}%
+  \vspace{5pt}%
+  #4%
+  \projectDivider
 }
 
+% Compact strength/method card — place side-by-side using \hfill
+% #1 large number  #2 bold label  #3 short body text
 \newcommand{\methodItem}[3]{%
   \begin{minipage}[t]{0.22\linewidth}
     {\Large\bfseries #1}\par
-    \vspace{4pt}
+    \vspace{\ResInnerSep}%
     {\bfseries #2}\par
-    \vspace{5pt}
-    {\scriptsize\linespread{1.32}\selectfont #3}
-  \end{minipage}
+    \vspace{5pt}%
+    {\scriptsize\linespread{1.32}\selectfont #3\par}%
+  \end{minipage}%
 }
 
 \newenvironment{tightBullets}{%
-  \begin{itemize}[leftmargin=1.15em,itemsep=2pt,topsep=0pt,parsep=0pt,partopsep=0pt,label=\textbullet]
+  \begin{itemize}[%
+    leftmargin=1.15em,
+    itemsep=2pt,
+    topsep=0pt,
+    parsep=0pt,
+    partopsep=0pt,
+    label=\textbullet]
     \small\linespread{1.32}\selectfont
 }{\end{itemize}}
 
