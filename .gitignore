@@ -1,0 +1,32 @@
+# macOS
+.DS_Store
+
+# LaTeX auxiliary files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.toc
+*.xdv
+
+# LaTeX editor/sync files
+*.synctex.gz
+
+# Generated documents
+*.pdf
+
+# Personal resume data
+latex/resume.tex
+latex/photo.*
+
+# Temporary files
+*.tmp
+*.bak
+*~

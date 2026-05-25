@@ -1,0 +1,108 @@
+\documentclass[UTF8,fontset=none,10pt]{ctexart}
+\usepackage{elegant-resume}
+
+\startResume
+
+% \vspace*{0.75cm}
+% 使用照片时，放到同目录，例如 photo.jpg，然后替换下一行为：
+\begin{center}
+  \includegraphics[height=4cm,keepaspectratio]{photo.jpg}
+\end{center}
+% \photoPlaceholder
+
+\profileHeader
+  {姓名}
+  {目标岗位}
+  {这里写 2 行个人简介。}
+
+\sideSection{基本信息}{
+城市 · 学历\\
+年龄 / 年级 / 状态\\
+语言或证书\\
+常用 ID: username
+}
+
+\sideSection{联系方式}{
+\href{mailto:yourname@email.com}{yourname@email.com}\\
+Phone: 12345678900\\
+\href{https://github.com/yourname}{github.com/yourname}\\
+\href{https://your-website.com}{your-website.com}
+}
+
+\sideSection{核心技能}{
+技能 A / 技能 B / 技能 C\\
+技能 D / 技能 E / 技能 F\\
+工具 A / 工具 B / 工具 C
+}
+
+\sideSection{教育背景}{
+学校名称\\
+专业名称\\
+开始时间 -- 结束时间
+}
+
+\sideSection{补充信息}{
+这里可以写兴趣方向、语言能力、奖项荣誉，或其他适合放在左栏的短内容。
+}
+
+\switchcolumn
+
+\firstMainSection{关于我}
+\bodyText{
+这里写纯文本段落。适合放个人介绍、职业方向、能力概述。段落之间可以用空行或手动加一点间距。
+
+第二段可以补充你解决问题的方法、项目偏好、沟通风格或长期目标。
+}
+
+\mainDivider
+\mainSection{代表项目}
+
+\projectItem
+  {项目名称}
+  {这里写项目描述。建议说明项目目标、你的职责、核心技术、结果或影响。}
+  {\tag{标签一} \hspace{4pt}\tag{标签二} \hspace{4pt}\tag{标签三}}
+  {备注}
+  {\href{https://example.com}{链接}}
+
+\projectItem
+  {另一个项目}
+  {项目描述可以更长一些，但建议控制在 2--3 行，保证整体版式稳定。}
+  {\tag{工具} \hspace{4pt}\tag{方向}}
+  {数据}
+  {100k+}
+
+\mainSection{经历}
+\datedItem
+  {公司或角色名称}
+  {2024.01 -- 至今}
+  {这里写一行经历摘要。右侧适合放时间，正文适合放职责范围。}
+  {
+    \begin{tightBullets}
+      \item 写具体行动和结果。
+      \item 写你负责的模块、流程或产出。
+      \item 写可量化影响或可验证成果。
+    \end{tightBullets}
+  }
+
+\datedItem
+  {另一段经历}
+  {2022.01 -- 2023.12}
+  {这里写经历摘要。}
+  {
+    \begin{tightBullets}
+      \item 要点一。
+      \item 要点二。
+    \end{tightBullets}
+  }
+
+\mainDivider
+\mainSection{方法与优势}
+\methodItem{01}{优势一}{这里写一段很短的说明。}
+\hfill
+\methodItem{02}{优势二}{这里写一段很短的说明。}
+\hfill
+\methodItem{03}{优势三}{这里写一段很短的说明。}
+\hfill
+\methodItem{04}{优势四}{这里写一段很短的说明。}
+
+\finishResume

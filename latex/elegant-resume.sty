@@ -1,0 +1,182 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{elegant-resume}[2026/05/24 Minimal two-column resume style]
+
+\RequirePackage[a4paper,top=1.2cm,bottom=1.2cm,left=1.05cm,right=1.05cm]{geometry}
+\RequirePackage{enumitem}
+\RequirePackage{xcolor}
+\RequirePackage{hyperref}
+\RequirePackage{fontspec}
+\RequirePackage{tikz}
+\RequirePackage{paracol}
+\RequirePackage{eso-pic}
+\RequirePackage{graphicx}
+\RequirePackage{tabularx}
+
+\setmainfont{Helvetica Neue}
+\setsansfont{Helvetica Neue}
+\setCJKmainfont{Hiragino Sans GB}
+\setCJKsansfont{Hiragino Sans GB}
+\renewcommand{\familydefault}{\sfdefault}
+
+\definecolor{sidebg}{HTML}{F3F3F1}
+\definecolor{linegray}{HTML}{D8D8D5}
+\definecolor{textgray}{HTML}{3F3F3F}
+\definecolor{muted}{HTML}{727272}
+\definecolor{tagbg}{HTML}{E9E9E7}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=black
+}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\setlength{\columnsep}{1.7cm}
+\columnratio{0.19}
+
+\AddToShipoutPictureBG{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[white] (current page.south west) rectangle (current page.north east);
+    \fill[sidebg] (current page.south west) rectangle ([xshift=.254\paperwidth]current page.north west);
+  \end{tikzpicture}%
+}
+
+\newcommand{\rulemark}{%
+  \vspace{1pt}{\color{black}\rule{0.34cm}{1.8pt}}\par\vspace{7pt}
+}
+
+\newcommand{\sideRule}{%
+  \vspace{3pt}{\color{linegray}\rule{\linewidth}{0.45pt}}\vspace{12pt}
+}
+
+\newcommand{\sideSection}[2]{%
+  \sideRule
+  {\large\bfseries #1}\par
+  \vspace{6pt}
+  {\small\linespread{1.28}\selectfont #2}\par
+}
+
+\newcommand{\mainSection}[1]{%
+  \vspace{14pt}
+  \noindent\begin{minipage}{\linewidth}
+    {\Large\bfseries #1}\par
+    \vspace{-1pt}
+    {\color{black}\rule{0.34cm}{1.8pt}}\par
+  \end{minipage}\par
+  \vspace{7pt}
+}
+
+\newcommand{\firstMainSection}[1]{%
+  \noindent\begin{minipage}{\linewidth}
+    {\Large\bfseries #1}\par
+    \vspace{-1pt}
+    {\color{black}\rule{0.34cm}{1.8pt}}\par
+  \end{minipage}\par
+  \vspace{7pt}
+}
+
+\newcommand{\mainDivider}{%
+  \par\vspace{6pt}%
+  {\color{linegray}\rule{\linewidth}{0.55pt}}\par
+  \vspace{4pt}%
+}
+
+\newcommand{\bodyText}[1]{%
+  {\small
+   \setlength{\parskip}{5pt}%
+   \setlength{\parindent}{0pt}%
+   \linespread{1.32}\selectfont
+   #1\par}%
+}
+
+\newcommand{\projectDivider}{%
+  \par\vspace{5pt}%
+  {\color{linegray}\rule{\linewidth}{0.4pt}}\par
+  \vspace{2pt}%
+}
+
+\newcommand{\tag}[1]{%
+  \tikz[baseline=(x.base)]\node[
+    inner xsep=7pt,
+    inner ysep=2pt,
+    rounded corners=3pt,
+    fill=tagbg,
+    text=muted,
+    font=\footnotesize
+  ] (x) {#1};%
+}
+
+\newcommand{\photoPlaceholder}{%
+  \begin{tikzpicture}
+    \fill[white] (0,0) rectangle (\linewidth,3.65);
+    \draw[linegray] (0,0) rectangle (\linewidth,3.65);
+    \node[text=muted] at (.5\linewidth,1.825) {\small 照片位置};
+  \end{tikzpicture}
+}
+
+\newcommand{\profileHeader}[3]{%
+  \vspace{18pt}
+  {\LARGE\bfseries #1}\par
+  \vspace{9pt}
+  {\large\bfseries #2}\par
+  \vspace{10pt}
+  {\small\linespread{1.45}\selectfont #3}\par
+}
+
+\newcommand{\projectItem}[5]{%
+  \noindent
+  \begin{minipage}[t]{0.76\linewidth}
+    {\large\bfseries #1}\par
+    \vspace{4pt}
+    {\small\linespread{1.32}\selectfont #2}\par
+    \vspace{5pt}
+    #3\par\vspace{3pt}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[t]{0.18\linewidth}
+    \vspace{2pt}
+    {\small #4}\par
+    \vspace{11pt}
+    {\small #5}\par
+  \end{minipage}
+  \projectDivider
+}
+
+\newcommand{\datedItem}[4]{%
+  \begin{tabularx}{\linewidth}{@{}X r@{}}
+    {\large\bfseries #1} & {\small #2}
+  \end{tabularx}\par
+  \vspace{8pt}
+  {\small\linespread{1.32}\selectfont #3\par}
+  \vspace{3pt}
+  #4
+  \vspace{12pt}
+}
+
+\newcommand{\methodItem}[3]{%
+  \begin{minipage}[t]{0.22\linewidth}
+    {\Large\bfseries #1}\par
+    \vspace{4pt}
+    {\bfseries #2}\par
+    \vspace{5pt}
+    {\scriptsize\linespread{1.35}\selectfont #3}
+  \end{minipage}
+}
+
+\newenvironment{tightBullets}{%
+  \begin{itemize}[leftmargin=1.15em,itemsep=2pt,topsep=0pt,parsep=0pt,partopsep=0pt,label=\textbullet]
+    \small\linespread{1.32}\selectfont
+}{\end{itemize}}
+
+\newcommand{\startResume}{%
+  \begin{document}
+  \color{textgray}
+  \begin{paracol}{2}
+}
+
+\newcommand{\finishResume}{%
+  \end{paracol}
+  \end{document}
+}
