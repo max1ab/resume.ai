@@ -21,10 +21,12 @@
 
 # Generated documents
 *.pdf
+!latex/resume-template.pdf
 
 # Personal resume data
 latex/resume.tex
 latex/photo.*
+!latex/sample-photo.jpg
 
 # Temporary files
 *.tmp

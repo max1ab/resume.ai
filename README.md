@@ -7,6 +7,7 @@
 - `latex/elegant-resume.sty`：版式和组件定义，控制字体、双栏、背景、标题、项目块、经历块等样式。
 - `latex/resume-template.tex`：可复制使用的模板，保留占位内容和常用组件示例。
 - `latex/resume.tex`：个人简历内容实例，默认被 `.gitignore` 忽略，不提交个人信息。
+- `latex/sample-photo.jpg`：模板示例头像，用于生成预览 PDF。
 - `latex/photo.*`：个人照片，默认被 `.gitignore` 忽略。
 
 ## 编译
@@ -47,7 +48,7 @@ cp latex/resume-template.tex latex/resume.tex
 
 ## 照片
 
-左栏顶部已经预留照片位置。后续把一寸照放到 `latex/photo.jpg`，然后在 `resume.tex` 或 `resume-template.tex` 顶部使用：
+左栏顶部已经预留照片位置。模板默认使用 `latex/sample-photo.jpg`。后续把个人一寸照放到 `latex/photo.jpg`，然后在 `resume.tex` 顶部使用：
 
 ```tex
 \includegraphics[width=2.5cm,height=3.5cm,keepaspectratio]{photo.jpg}
