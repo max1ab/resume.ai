@@ -19,14 +19,15 @@
 # LaTeX editor/sync files
 *.synctex.gz
 
-# Generated documents
+# Generated PDFs
 *.pdf
-!latex/resume-template.pdf
 
-# Personal resume data
-latex/resume.tex
-latex/photo.*
-!latex/sample-photo.jpg
+# Personal resume files (gitignored, use resumes/resume.tex as reference)
+resumes/*.tex
+!resumes/resume.tex
+
+# Personal photo
+resumes/assets/
 
 # Temporary files
 *.tmp
