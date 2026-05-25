@@ -25,6 +25,27 @@ resume-it/
 
 ## 编译
 
+推荐使用 Makefile：
+
+```bash
+# 编译示例简历
+make
+
+# 编译指定简历
+make FILE=resumes/[岗位].tex
+
+# 一次编译所有简历
+make all
+
+# 监听改动，保存后自动重编
+make watch FILE=resumes/[岗位].tex
+
+# 清理中间文件（.aux .log .out 等）
+make clean FILE=resumes/[岗位].tex
+```
+
+也可以直接使用 `latexmk`：
+
 ```bash
 # 编译单份简历
 latexmk -cd resumes/sample-resume.tex
