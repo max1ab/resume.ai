@@ -1,214 +1,104 @@
-# Resume LaTeX Template
+# Resume AI Template
 
-一个双栏 LaTeX 简历模板，左栏放照片、姓名、基础信息，右栏放关于我、项目经历、实习经历等主要内容。
+一个适合配合 AI agent 使用的 LaTeX 简历模板项目。
 
-## 目录结构
+这个项目不是让用户手写 LaTeX，而是提供一套稳定的简历版式和组件。用户只需要告诉 agent 自己的背景、目标岗位和想要的风格，agent 就可以基于模板生成不同内容、不同侧重点的简历。
 
+## 适合怎么用
+
+你可以直接对 agent 说：
+
+```text
+基于这个仓库，帮我生成一份面向 AI 工程师岗位的中文简历。
+重点突出我的项目经历、模型部署经验和工程能力。
+文件放到 resumes/ai-engineer.tex。
 ```
+
+也可以继续让 agent 迭代：
+
+```text
+把这份简历改成后端开发方向，弱化算法表述，强化服务端架构和性能优化。
+```
+
+```text
+帮我压缩到一页，语气更像正式求职简历，不要太营销。
+```
+
+```text
+根据这个 JD 重新组织项目顺序，并生成一版投递用 PDF。
+```
+
+## 项目结构
+
+```text
 resume-it/
 ├── templates/
-│   ├── elegant-resume.sty     版式和组件定义
-│   └── resume-template.tex    完整模板，含所有组件示例和占位内容
+│   ├── elegant-resume.sty     模板样式和组件
+│   └── resume-template.tex    模板完整示例
 ├── resumes/
-│   ├── sample-resume.tex      示例简历，可作为新建简历的起点
+│   ├── sample-resume.tex      示例简历
 │   ├── sample-photo.jpg       示例头像
-│   ├── [岗位].tex             个人简历（建议加入 .gitignore）
-│   └── photo.jpg              个人照片（建议加入 .gitignore）
-└── .latexmkrc                 编译配置，自动使用 XeLaTeX 并设置 TEXINPUTS
+│   ├── [岗位].tex             你的不同岗位简历
+│   └── photo.jpg              你的个人照片
+├── Makefile                   常用编译命令
+└── .latexmkrc                 LaTeX 编译配置
 ```
+
+`templates/` 是模板本体，通常不需要用户直接修改。
+
+`resumes/` 是简历工作区。你可以让 agent 从 `sample-resume.tex` 复制出多份简历，例如：
+
+```text
+resumes/ai-engineer.tex
+resumes/backend.tex
+resumes/product-manager.tex
+```
+
+## 快速开始
+
+先编译示例简历：
+
+```bash
+make
+```
+
+生成指定简历：
+
+```bash
+make FILE=resumes/ai-engineer.tex
+```
+
+监听改动并自动重新生成 PDF：
+
+```bash
+make watch FILE=resumes/ai-engineer.tex
+```
+
+清理中间文件：
+
+```bash
+make clean FILE=resumes/ai-engineer.tex
+```
+
+## 给 Agent 的建议
+
+如果你把这个仓库交给 agent 使用，可以让它遵守这些原则：
+
+- 不要修改 `templates/`，除非明确要调整整体版式。
+- 新简历从 `resumes/sample-resume.tex` 复制。
+- 不同岗位使用不同文件名，例如 `resumes/backend.tex`。
+- 用户照片直接放在 `resumes/` 下，例如 `resumes/photo.jpg`。
+- 编译优先使用 `make FILE=...`。
+- 简历内容优先按目标岗位和 JD 重组，而不是简单堆砌经历。
 
 ## 环境要求
 
-- TeX 发行版：[TeX Live](https://www.tug.org/texlive/) 或 [MiKTeX](https://miktex.org/)（需含 XeLaTeX）
-- 字体：**Helvetica Neue**（正文）、**Hiragino Sans GB**（中文）
-- 包：`latexmk`（推荐，用于自动编译）
+- TeX Live 或 MacTeX，需包含 XeLaTeX
+- `latexmk`
+- 推荐字体：Helvetica Neue、Hiragino Sans GB
 
-## 编译
+## 隐私
 
-推荐使用 Makefile：
+真实简历和个人照片默认适合放在 `resumes/` 下，并通过 `.gitignore` 忽略。建议只提交模板和示例，不提交个人信息。
 
-```bash
-# 编译示例简历
-make
-
-# 编译指定简历
-make FILE=resumes/[岗位].tex
-
-# 一次编译所有简历
-make all
-
-# 监听改动，保存后自动重编
-make watch FILE=resumes/[岗位].tex
-
-# 清理中间文件（.aux .log .out 等）
-make clean FILE=resumes/[岗位].tex
-```
-
-也可以直接使用 `latexmk`：
-
-```bash
-# 编译单份简历
-latexmk -cd resumes/sample-resume.tex
-
-# 一次编译所有简历
-latexmk -cd resumes/*.tex
-
-# 监听改动，保存后自动重编
-latexmk -cd -pvc resumes/sample-resume.tex
-
-# 清理中间文件（.aux .log .out 等）
-latexmk -cd -C resumes/sample-resume.tex
-```
-
-也可以直接用 XeLaTeX：
-
-```bash
-cd resumes && xelatex sample-resume.tex
-```
-
-## 新建一份简历
-
-复制占位文件，以岗位命名：
-
-```bash
-cp resumes/sample-resume.tex resumes/[岗位].tex
-```
-
-然后替换各组件里的占位内容即可。照片可直接放到 `resumes/` 下，在 `.tex` 中引用：
-
-```tex
-\begin{center}
-  \includegraphics[width=\linewidth,height=4cm,keepaspectratio]{photo.jpg}
-\end{center}
-```
-
-没有照片时用占位框：
-
-```tex
-\photoPlaceholder
-```
-
-## 组件说明
-
-### 文档结构
-
-```tex
-\documentclass[UTF8,fontset=none,10pt]{ctexart}
-\usepackage{elegant-resume}          % 默认
-\usepackage[singlepage]{elegant-resume}  % 开启单页模式，超出内容静默丢弃
-
-\startResume   % 开始（左栏内容写在这里）
-
-\switchcolumn  % 切换到右栏
-
-\finishResume  % 结束
-```
-
-### 左栏组件
-
-| 命令 | 用途 |
-|------|------|
-| `\profileHeader{姓名}{岗位}{简介}` | 姓名标题块，简介可传 `{}` |
-| `\sideSection{标题}{内容}` | 信息区块，自动在上方加分隔线 |
-| `\photoPlaceholder` | 照片占位框 |
-
-### 右栏组件
-
-| 命令 | 用途 |
-|------|------|
-| `\firstMainSection{标题}` | 第一个节标题，无上边距 |
-| `\mainSection{标题}` | 后续节标题，自动加上边距 |
-| `\bodyText{内容}` | 纯文本段落 |
-| `\projectItem{名称}{描述}{标签}{备注}{链接}` | 项目块，备注和链接可传空 `{}` |
-| `\datedItem{名称}{时间}{摘要}{内容}` | 经历块，内容支持 `tightBullets` 环境 |
-| `\methodItem{序号}{标题}{说明}` | 方法/优势块，四个并排用 `\hfill` 分隔 |
-| `\resumeTag{文字}` | 技术标签胶囊 |
-
-### 列表
-
-```tex
-\begin{tightBullets}
-  \item 要点一
-  \item 要点二
-\end{tightBullets}
-```
-
-### 完整示例
-
-```tex
-\documentclass[UTF8,fontset=none,10pt]{ctexart}
-\usepackage{elegant-resume}
-
-\startResume
-
-\photoPlaceholder
-
-\profileHeader{姓名}{目标岗位}{一句话简介}
-
-\sideSection{联系方式}{
-\href{mailto:you@email.com}{you@email.com}\\
-Phone: 13800000000
-}
-
-\switchcolumn
-
-\firstMainSection{关于我}
-\bodyText{这里写个人简介。}
-
-\mainSection{项目经历}
-\projectItem
-  {项目名称}
-  {项目描述}
-  {\resumeTag{技术栈}}
-  {}
-  {\href{https://github.com/}{GitHub}}
-
-\mainSection{工作经历}
-\datedItem
-  {公司名称}
-  {2024.01 -- 至今}
-  {一行摘要}
-  {
-    \begin{tightBullets}
-      \item 具体工作内容
-    \end{tightBullets}
-  }
-
-\finishResume
-```
-
-## 间距调节
-
-视觉节奏由 `.sty` 顶部的三个长度变量控制，可在 `.tex` 的前言区覆盖：
-
-```tex
-\setlength{\ResSectionSep}{8pt}   % 节标题上方间距
-\setlength{\ResItemSep}{6pt}      % 条目间 / 分隔线前后
-\setlength{\ResInnerSep}{4pt}     % 条目内部子元素间距
-```
-
-## 维护
-
-- 调整视觉样式 → 改 `templates/elegant-resume.sty`，`.latexmkrc` 会让 `resumes/` 下的简历自动找到它
-- 更新个人内容 → 改对应的 `resumes/[岗位].tex`
-
-## 个人简历私有化
-
-Git 不支持分支级别的可见性。推荐将个人简历存入独立的**私有 repo**，通过 remote 同步模板更新：
-
-```bash
-# 在私有 repo 里添加本模板为 upstream
-git remote add template git@github.com:你/resume-it.git
-
-# 同步模板改动
-git fetch template
-git merge template/main
-```
-
-或者简单地在 `.gitignore` 中忽略个人文件：
-
-```gitignore
-resumes/[岗位].tex
-resumes/photo.jpg
-resumes/*.pdf
-```
+如果你要公开这个仓库，请确认 `resumes/` 下没有真实姓名、联系方式、照片或未公开项目经历。
