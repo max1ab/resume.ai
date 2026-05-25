@@ -173,6 +173,29 @@
   \projectDivider
 }
 
+% Project card with an image in the right column
+% #1 title  #2 description  #3 tags  #4 image file
+\newcommand{\projectImageItem}[4]{%
+  \noindent
+  \begin{minipage}[t]{0.76\linewidth}
+    {\large\bfseries #1}\par
+    \vspace{\ResInnerSep}%
+    {\small\linespread{1.32}\selectfont #2}\par
+    \vspace{5pt}%
+    #3\par\vspace{3pt}%
+  \end{minipage}%
+  \hfill
+  \begin{minipage}[t]{0.18\linewidth}
+    \vspace{-10pt}%
+    \IfFileExists{assets/#4}{%
+      \includegraphics[width=\linewidth,keepaspectratio]{#4}%
+    }{%
+      \fbox{\parbox[c][2.0cm][c]{\linewidth}{\centering\scriptsize 图片位置}}%
+    }%
+  \end{minipage}%
+  \projectDivider
+}
+
 % Experience / education entry with date aligned to the right
 % #1 title  #2 date range  #3 one-line summary  #4 bullet list (tightBullets env)
 \newcommand{\datedItem}[4]{%
