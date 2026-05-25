@@ -8,15 +8,12 @@
 resume-it/
 ├── templates/
 │   ├── elegant-resume.sty     版式和组件定义
-│   ├── resume-template.tex    完整模板，含所有组件示例和占位内容
-│   └── assets/
-│       └── sample-photo.jpg   模板示例头像
+│   └── resume-template.tex    完整模板，含所有组件示例和占位内容
 ├── resumes/
-│   ├── elegant-resume.sty     → 软链接，指向 templates/elegant-resume.sty
-│   ├── resume.tex             通用占位简历，可作为新建简历的起点
+│   ├── sample-resume.tex      示例简历，可作为新建简历的起点
+│   ├── sample-photo.jpg       示例头像
 │   ├── [岗位].tex             个人简历（建议加入 .gitignore）
-│   └── assets/
-│       └── photo.jpg          个人照片（建议加入 .gitignore）
+│   └── photo.jpg              个人照片（建议加入 .gitignore）
 └── .latexmkrc                 编译配置，自动使用 XeLaTeX 并设置 TEXINPUTS
 ```
 
@@ -30,22 +27,22 @@ resume-it/
 
 ```bash
 # 编译单份简历
-latexmk -cd resumes/resume.tex
+latexmk -cd resumes/sample-resume.tex
 
 # 一次编译所有简历
 latexmk -cd resumes/*.tex
 
 # 监听改动，保存后自动重编
-latexmk -cd -pvc resumes/resume.tex
+latexmk -cd -pvc resumes/sample-resume.tex
 
 # 清理中间文件（.aux .log .out 等）
-latexmk -cd -C resumes/resume.tex
+latexmk -cd -C resumes/sample-resume.tex
 ```
 
 也可以直接用 XeLaTeX：
 
 ```bash
-cd resumes && xelatex resume.tex
+cd resumes && xelatex sample-resume.tex
 ```
 
 ## 新建一份简历
@@ -53,10 +50,10 @@ cd resumes && xelatex resume.tex
 复制占位文件，以岗位命名：
 
 ```bash
-cp resumes/resume.tex resumes/[岗位].tex
+cp resumes/sample-resume.tex resumes/[岗位].tex
 ```
 
-然后替换各组件里的占位内容即可。照片放到 `resumes/assets/` 下，在 `.tex` 中引用：
+然后替换各组件里的占位内容即可。照片可直接放到 `resumes/` 下，在 `.tex` 中引用：
 
 ```tex
 \begin{center}
@@ -120,7 +117,6 @@ cp resumes/resume.tex resumes/[岗位].tex
 ```tex
 \documentclass[UTF8,fontset=none,10pt]{ctexart}
 \usepackage{elegant-resume}
-\graphicspath{{assets/}}
 
 \startResume
 
@@ -172,7 +168,7 @@ Phone: 13800000000
 
 ## 维护
 
-- 调整视觉样式 → 改 `templates/elegant-resume.sty`，`resumes/` 下的软链接使所有简历自动生效
+- 调整视觉样式 → 改 `templates/elegant-resume.sty`，`.latexmkrc` 会让 `resumes/` 下的简历自动找到它
 - 更新个人内容 → 改对应的 `resumes/[岗位].tex`
 
 ## 个人简历私有化
@@ -192,6 +188,6 @@ git merge template/main
 
 ```gitignore
 resumes/[岗位].tex
-resumes/assets/photo.jpg
+resumes/photo.jpg
 resumes/*.pdf
 ```

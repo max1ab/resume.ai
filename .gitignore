@@ -22,12 +22,14 @@
 # Generated PDFs
 *.pdf
 
-# Personal resume files (gitignored, use resumes/resume.tex as reference)
+# Personal resume files (gitignored, use resumes/sample-resume.tex as reference)
 resumes/*.tex
-!resumes/resume.tex
+!resumes/sample-resume.tex
 
 # Personal photo
-resumes/assets/
+resumes/*
+!resumes/sample-resume.tex
+!resumes/sample-photo.jpg
 
 # Temporary files
 *.tmp
