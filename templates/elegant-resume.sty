@@ -1,6 +1,16 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{elegant-resume}[2026/05/25 Minimal two-column resume style]
 
+% Package option: singlepage — silently discard every page after the first
+\newif\if@resumeSinglePage \@resumeSinglePagefalse
+\DeclareOption{singlepage}{\@resumeSinglePagetrue}
+\ProcessOptions\relax
+
+\if@resumeSinglePage
+  \RequirePackage{atbegshi}
+  \AtBeginShipout{\ifnum\value{page}>1\relax\AtBeginShipoutDiscard\fi}
+\fi
+
 \RequirePackage[a4paper,top=1.2cm,bottom=1.2cm,left=1.05cm,right=1.05cm]{geometry}
 \RequirePackage{enumitem}
 \RequirePackage{xcolor}
