@@ -1,0 +1,173 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "Resume AI HTML schema — all fields except 'mainSections' are optional. Mirrors the elegant-resume.sty macro set.",
+
+  "type": "object",
+  "properties": {
+
+    "photo": {
+      "$comment": "对应 \\includegraphics 或 \\photoPlaceholder。填 null 或省略时显示占位框。",
+      "type": ["string", "null"],
+      "examples": ["resumes/photo.jpg", null]
+    },
+
+    "profile": {
+      "$comment": "对应 \\profileHeader{name}{role}{tagline}",
+      "type": "object",
+      "properties": {
+        "name":    { "type": "string", "description": "姓名" },
+        "role":    { "type": "string", "description": "目标岗位" },
+        "tagline": { "type": "string", "description": "2行以内的个人简介，显示在岗位下方" }
+      },
+      "required": ["name", "role"]
+    },
+
+    "sideSections": {
+      "$comment": "对应多个 \\sideSection{title}{body}，按数组顺序渲染",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "description": "侧栏分块标题，如"基本信息"、"联系方式"" },
+          "lines": {
+            "$comment": "每行可以是纯文本字符串，或带链接的对象 { text, url }",
+            "type": "array",
+            "items": {
+              "oneOf": [
+                { "type": "string" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "text": { "type": "string" },
+                    "url":  { "type": "string", "description": "仅允许 http://, https://, mailto: 开头" }
+                  },
+                  "required": ["text", "url"]
+                }
+              ]
+            }
+          }
+        },
+        "required": ["title", "lines"]
+      },
+      "examples": [
+        {
+          "title": "基本信息",
+          "lines": ["城市 · 学历", "年龄 / 状态", "常用 ID: username"]
+        },
+        {
+          "title": "联系方式",
+          "lines": [
+            { "text": "yourname@email.com", "url": "mailto:yourname@email.com" },
+            "Phone: 12345678900",
+            { "text": "github.com/yourname", "url": "https://github.com/yourname" }
+          ]
+        }
+      ]
+    },
+
+    "mainSections": {
+      "$comment": "主栏分章列表，第一个自动省略上方分割线（对应 \\firstMainSection）",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "description": "章节标题" },
+          "type":  {
+            "type": "string",
+            "enum": ["body", "projects", "experience", "methods"],
+            "description": "决定渲染哪种组件"
+          }
+        },
+        "required": ["title", "type"],
+
+        "oneOf": [
+
+          {
+            "$comment": "type=body — 对应 \\bodyText，纯文本段落",
+            "properties": {
+              "type": { "const": "body" },
+              "paragraphs": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "每个字符串是一个段落"
+              }
+            }
+          },
+
+          {
+            "$comment": "type=projects — 对应 \\projectItem / \\projectImageItem",
+            "properties": {
+              "type": { "const": "projects" },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title":       { "type": "string", "description": "项目名称" },
+                    "description": { "type": "string", "description": "项目描述，建议 2-3 行" },
+                    "tags":        {
+                      "type": "array",
+                      "items": { "type": "string" },
+                      "description": "对应 \\resumeTag，显示为圆角标签胶囊"
+                    },
+                    "metaLabel":   { "type": "string",  "description": "右侧小字标签，如"备注"、"数据"" },
+                    "metaValue":   { "type": "string",  "description": "右侧小字值；若以 http/https 开头则渲染为链接" },
+                    "image":       { "type": "string",  "description": "对应 \\projectImageItem，填图片路径时显示图片而非 metaLabel/Value" }
+                  },
+                  "required": ["title", "description"]
+                }
+              }
+            }
+          },
+
+          {
+            "$comment": "type=experience — 对应 \\datedItem + tightBullets",
+            "properties": {
+              "type": { "const": "experience" },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title":   { "type": "string", "description": "公司或角色名称" },
+                    "date":    { "type": "string", "description": "时间范围，如"2024.01 — 至今"" },
+                    "summary": { "type": "string", "description": "一行经历摘要" },
+                    "bullets": {
+                      "type": "array",
+                      "items": { "type": "string" },
+                      "description": "要点列表，对应 tightBullets"
+                    }
+                  },
+                  "required": ["title", "date"]
+                }
+              }
+            }
+          },
+
+          {
+            "$comment": "type=methods — 对应 \\methodItem 四宫格，建议填 4 个",
+            "properties": {
+              "type": { "const": "methods" },
+              "items": {
+                "type": "array",
+                "maxItems": 4,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "number": { "type": ["string", "number"], "description": "大号数字，如"01"" },
+                    "label":  { "type": "string", "description": "粗体标签" },
+                    "text":   { "type": "string", "description": "简短说明，建议 15-30 字" }
+                  },
+                  "required": ["number", "label", "text"]
+                }
+              }
+            }
+          }
+
+        ]
+      }
+    }
+
+  },
+  "required": ["profile", "mainSections"]
+}

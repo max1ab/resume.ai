@@ -1,0 +1,403 @@
+/* ============================================================
+   Resume CSS — mirrors elegant-resume.sty visual design
+   Two-column layout: 19% sidebar / 81% main
+   ============================================================ */
+
+/* ── Variables ─────────────────────────────────────────────── */
+:root {
+  --sidebg:    #F3F3F1;
+  --linegray:  #D8D8D5;
+  --textgray:  #3F3F3F;
+  --muted:     #727272;
+  --tagbg:     #E9E9E7;
+  --accent:    #000000;
+
+  --font-stack: -apple-system, "Helvetica Neue", "Hiragino Sans GB",
+                "PingFang SC", "Microsoft YaHei", sans-serif;
+
+  --section-sep: 8pt;
+  --item-sep:    6pt;
+  --inner-sep:   4pt;
+}
+
+/* ── Reset & Base ───────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  font-family: var(--font-stack);
+  font-size: 10pt;
+  color: var(--textgray);
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ── Page / A4 wrapper ──────────────────────────────────────── */
+.resume-page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 19% 81%;
+  position: relative;
+}
+
+/* ── Sidebar ────────────────────────────────────────────────── */
+.sidebar {
+  background: var(--sidebg);
+  padding: 1.2cm 1.05cm 1.2cm 1.05cm;
+  min-height: 297mm;
+}
+
+/* Photo area */
+.photo-area {
+  width: 100%;
+  margin-bottom: 16pt;
+}
+
+.photo-area img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.photo-placeholder {
+  width: 100%;
+  aspect-ratio: 3 / 3.65;
+  border: 1px solid var(--linegray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 8pt;
+  background: #ffffff;
+}
+
+/* Profile block (name / role / tagline) */
+.profile-header {
+  padding-top: 18pt;
+}
+
+.profile-name {
+  font-size: 18pt;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.2;
+  margin-bottom: 10pt;
+}
+
+.profile-role {
+  font-size: 11pt;
+  font-weight: 700;
+  color: var(--textgray);
+  margin-bottom: 8pt;
+}
+
+.profile-tagline {
+  font-size: 8pt;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* Sidebar section divider */
+.side-rule {
+  border: none;
+  border-top: 0.45pt solid var(--linegray);
+  margin: 10pt 0 10pt;
+}
+
+/* Sidebar section */
+.side-section-title {
+  font-size: 11pt;
+  font-weight: 700;
+  color: var(--textgray);
+  margin-bottom: var(--inner-sep);
+}
+
+.side-section-body {
+  font-size: 8pt;
+  line-height: 1.5;
+  color: var(--textgray);
+}
+
+.side-section-body a {
+  color: var(--textgray);
+  word-break: break-all;
+}
+
+/* ── Main column ────────────────────────────────────────────── */
+.main {
+  padding: 1.2cm 1.05cm 1.2cm 1.7cm;
+}
+
+/* Main section heading with short underline */
+.main-section {
+  margin-top: calc(var(--item-sep) + var(--section-sep));
+}
+
+.main-section.first {
+  margin-top: 0;
+}
+
+.main-section-title {
+  font-size: 14pt;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.2;
+}
+
+.main-section-rule {
+  display: block;
+  width: 0.34cm;
+  height: 1.8pt;
+  background: var(--accent);
+  margin-top: 2pt;
+  margin-bottom: 7pt;
+}
+
+/* Section divider in main column */
+.main-divider {
+  border: none;
+  border-top: 0.55pt solid var(--linegray);
+  margin: var(--item-sep) 0 var(--inner-sep);
+}
+
+/* ── Body text ──────────────────────────────────────────────── */
+.body-text {
+  font-size: 8.5pt;
+  line-height: 1.5;
+  color: var(--textgray);
+}
+
+.body-text p + p {
+  margin-top: 6pt;
+}
+
+/* ── Project item ───────────────────────────────────────────── */
+.project-item {
+  display: flex;
+  gap: 1.5%;
+  align-items: flex-start;
+  padding-bottom: var(--item-sep);
+}
+
+.project-main {
+  flex: 0 0 76%;
+}
+
+.project-meta {
+  flex: 0 0 18%;
+  font-size: 8pt;
+  color: var(--muted);
+  padding-top: 2pt;
+  text-align: right;
+  word-break: break-all;
+}
+
+.project-meta-label {
+  display: block;
+  color: var(--muted);
+  font-size: 7.5pt;
+}
+
+.project-meta-value {
+  display: block;
+  color: var(--textgray);
+  font-size: 8pt;
+  margin-top: var(--inner-sep);
+  word-break: break-all;
+}
+
+.project-image {
+  flex: 0 0 18%;
+  padding-top: 0;
+}
+
+.project-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-top: -10pt;
+}
+
+.project-title {
+  font-size: 11pt;
+  font-weight: 700;
+  color: var(--textgray);
+  margin-bottom: var(--inner-sep);
+}
+
+.project-desc {
+  font-size: 8.5pt;
+  line-height: 1.5;
+  color: var(--textgray);
+  margin-bottom: 5pt;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4pt;
+  margin-top: 3pt;
+  margin-bottom: 3pt;
+}
+
+/* Thin separator below each project/experience item */
+.item-divider {
+  border: none;
+  border-top: 0.4pt solid var(--linegray);
+  margin: var(--item-sep) 0 var(--inner-sep);
+}
+
+/* ── Inline tag chip ────────────────────────────────────────── */
+.tag {
+  display: inline-block;
+  padding: 2pt 7pt;
+  border-radius: 3pt;
+  background: var(--tagbg);
+  color: var(--muted);
+  font-size: 7.5pt;
+  line-height: 1.4;
+}
+
+/* ── Dated item (experience / education) ────────────────────── */
+.dated-item {
+  padding-bottom: var(--item-sep);
+}
+
+.dated-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8pt;
+}
+
+.dated-title {
+  font-size: 11pt;
+  font-weight: 700;
+  color: var(--textgray);
+}
+
+.dated-date {
+  font-size: 8pt;
+  color: var(--muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.dated-summary {
+  font-size: 8.5pt;
+  line-height: 1.5;
+  color: var(--textgray);
+  margin-top: var(--item-sep);
+}
+
+.dated-bullets {
+  margin-top: 5pt;
+  padding-left: 1.15em;
+  list-style: disc;
+}
+
+.dated-bullets li {
+  font-size: 8.5pt;
+  line-height: 1.5;
+  color: var(--textgray);
+  margin-bottom: 2pt;
+}
+
+/* ── Method item (4-col strength grid) ─────────────────────── */
+.methods-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8pt;
+}
+
+.method-item {
+  /* no extra padding needed */
+}
+
+.method-number {
+  font-size: 14pt;
+  font-weight: 700;
+  color: var(--textgray);
+  line-height: 1.1;
+}
+
+.method-label {
+  font-size: 8.5pt;
+  font-weight: 700;
+  color: var(--textgray);
+  margin-top: var(--inner-sep);
+  margin-bottom: 5pt;
+}
+
+.method-text {
+  font-size: 7pt;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* ── Print styles ───────────────────────────────────────────── */
+@page {
+  size: A4;
+  margin: 1.2cm 1.05cm;
+}
+
+@media print {
+  html, body {
+    background: #ffffff;
+  }
+
+  .resume-page {
+    width: 100%;
+    margin: 0;
+    box-shadow: none;
+  }
+
+  .sidebar {
+    min-height: 0;
+    /* preserve sidebar background color when printing */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .item-divider,
+  .main-divider,
+  .side-rule {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .tag {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* ── Screen-only shadow (preview comfort) ──────────────────── */
+@media screen {
+  body {
+    background: #e8e8e8;
+    padding: 20px 0 40px;
+  }
+
+  .resume-page {
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+  }
+}

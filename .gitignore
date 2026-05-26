@@ -1,7 +1,22 @@
 # macOS
 .DS_Store
 
-# LaTeX auxiliary files
+# ── HTML build outputs ───────────────────────────────────────
+# Generated HTML files (built from JSON via scripts/build.mjs)
+resumes/*.html
+!resumes/sample-resume.html
+
+# ── Personal resume data & photos ───────────────────────────
+# Keep only the committed sample files; ignore everything else in resumes/
+resumes/*
+!resumes/sample-resume.json
+!resumes/sample-photo.jpg
+!resumes/sample-resume.html
+
+# ── Node ────────────────────────────────────────────────────
+node_modules/
+
+# ── Legacy / LaTeX auxiliary files ──────────────────────────
 *.aux
 *.bbl
 *.bcf
@@ -15,23 +30,10 @@
 *.run.xml
 *.toc
 *.xdv
-
-# LaTeX editor/sync files
 *.synctex.gz
-
-# Generated PDFs
 *.pdf
 
-# Personal resume files (gitignored, use resumes/sample-resume.tex as reference)
-resumes/*.tex
-!resumes/sample-resume.tex
-
-# Personal photo
-resumes/*
-!resumes/sample-resume.tex
-!resumes/sample-photo.jpg
-
-# Temporary files
+# ── Temporary files ──────────────────────────────────────────
 *.tmp
 *.bak
 *~
