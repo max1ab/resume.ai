@@ -55,7 +55,10 @@ function build() {
     // Resolve photo path relative to the output HTML file so <img src> works
     // when the HTML is opened directly from the resumes/ directory.
     const resolvedData = resolvePhotoPaths(parsed, jsonPath);
-    const embeddedData = JSON.stringify(resolvedData, null, 2);
+    const embeddedData = JSON.stringify(resolvedData, null, 2)
+      .replace(/</g, '\\u003c')
+      .replace(/>/g, '\\u003e')
+      .replace(/&/g, '\\u0026');
 
     // Escape closing tags so inline CSS/JS cannot break out of their containers
     const safeCss = css.replace(/<\/style>/gi, '<\\/style>');

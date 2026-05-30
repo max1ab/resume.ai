@@ -210,7 +210,12 @@
       case 'projects':   return renderProjects(section, isFirst);
       case 'experience': return renderExperience(section, isFirst);
       case 'methods':    return renderMethods(section, isFirst);
-      default:           return '';
+      default:
+        console.warn('[resume] unknown section type:', section.type, section);
+        return `
+<div class="render-warning">
+  未知组件类型：${escapeHTML(section.type || '(empty)')}
+</div>`;
     }
   }
 

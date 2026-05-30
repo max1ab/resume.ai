@@ -349,10 +349,19 @@ a:hover {
   color: var(--muted);
 }
 
+.render-warning {
+  margin: 8pt 0;
+  padding: 6pt 8pt;
+  border: 1px solid #b91c1c;
+  color: #b91c1c;
+  font-size: 8pt;
+  font-family: var(--font-stack);
+}
+
 /* ── Print styles ───────────────────────────────────────────── */
 @page {
   size: A4;
-  margin: 1.2cm 1.05cm;
+  margin: 0;
 }
 
 @media print {
@@ -361,7 +370,8 @@ a:hover {
   }
 
   .resume-page {
-    width: 100%;
+    width: 210mm;
+    min-height: 297mm;
     margin: 0;
     box-shadow: none;
   }
@@ -387,6 +397,10 @@ a:hover {
   .tag {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+  }
+
+  .render-warning {
+    display: none;
   }
 }
 

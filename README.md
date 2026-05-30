@@ -2,7 +2,7 @@
 
 一个适合配合 AI agent 使用的 HTML 简历模板项目。
 
-用户只需把自己的背景、目标岗位和经历告诉 agent，agent 将内容整理成 JSON，通过构建脚本生成一份可直接在浏览器打开的自包含 HTML 简历。无需安装 LaTeX 或任何运行时依赖，浏览器打印即可导出 PDF。
+用户只需把自己的背景、目标岗位和经历告诉 agent，agent 将内容整理成 JSON，通过构建脚本生成一份可直接在浏览器打开的 HTML 简历。生成文件会内联样式和脚本；照片仍按相对路径引用。无需安装 LaTeX 或任何 npm 依赖，浏览器打印即可导出 PDF。
 
 ## 适合怎么用
 
@@ -43,7 +43,7 @@ resume.ai/
 │   ├── [岗位].json             你的不同岗位简历数据
 │   └── photo.jpg               你的个人照片（gitignore 忽略）
 ├── scripts/
-│   └── build.mjs               构建脚本（纯 Node stdlib，零依赖）
+│   └── build.mjs               构建脚本（纯 Node stdlib，无 npm 依赖）
 └── legacy/                     归档的 LaTeX 方案（见 legacy/README.md）
 ```
 

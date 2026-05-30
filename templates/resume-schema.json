@@ -28,7 +28,7 @@
       "items": {
         "type": "object",
         "properties": {
-          "title": { "type": "string", "description": "侧栏分块标题，如"基本信息"、"联系方式"" },
+          "title": { "type": "string", "description": "侧栏分块标题，如“基本信息”、“联系方式”" },
           "lines": {
             "$comment": "每行可以是纯文本字符串，或带链接的对象 { text, url }",
             "type": "array",
@@ -110,7 +110,7 @@
                       "items": { "type": "string" },
                       "description": "对应 \\resumeTag，显示为圆角标签胶囊"
                     },
-                    "metaLabel":   { "type": "string",  "description": "右侧小字标签，如"备注"、"数据"" },
+                    "metaLabel":   { "type": "string",  "description": "右侧小字标签，如“备注”、“数据”" },
                     "metaValue":   { "type": "string",  "description": "右侧小字值；若以 http/https 开头则渲染为链接" },
                     "image":       { "type": "string",  "description": "对应 \\projectImageItem，填图片路径时显示图片而非 metaLabel/Value" }
                   },
@@ -130,7 +130,7 @@
                   "type": "object",
                   "properties": {
                     "title":   { "type": "string", "description": "公司或角色名称" },
-                    "date":    { "type": "string", "description": "时间范围，如"2024.01 — 至今"" },
+                    "date":    { "type": "string", "description": "时间范围，如“2024.01 — 至今”" },
                     "summary": { "type": "string", "description": "一行经历摘要" },
                     "bullets": {
                       "type": "array",
@@ -154,7 +154,7 @@
                 "items": {
                   "type": "object",
                   "properties": {
-                    "number": { "type": ["string", "number"], "description": "大号数字，如"01"" },
+                    "number": { "type": ["string", "number"], "description": "大号数字，如“01”" },
                     "label":  { "type": "string", "description": "粗体标签" },
                     "text":   { "type": "string", "description": "简短说明，建议 15-30 字" }
                   },
