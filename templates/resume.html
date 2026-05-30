@@ -7,6 +7,12 @@
   <link rel="stylesheet" href="resume.css" />
 </head>
 <body>
+  <div class="preview-toolbar" aria-label="预览缩放控制">
+    <button type="button" data-zoom="out" title="缩小">−</button>
+    <button type="button" data-zoom="fit" title="适应宽度">适应宽度</button>
+    <span id="zoom-label">100%</span>
+    <button type="button" data-zoom="in" title="放大">+</button>
+  </div>
   <div id="app"></div>
   <script type="application/json" id="resume-data">__RESUME_DATA__</script>
   <script src="render.js"></script>

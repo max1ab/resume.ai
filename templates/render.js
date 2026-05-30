@@ -230,7 +230,58 @@
   function renderResume(data) {
     const sidebar = renderSidebar(data);
     const main    = renderMain(data);
-    return `<div class="resume-page">${sidebar}${main}</div>`;
+    return `<div class="preview-shell"><div class="resume-page">${sidebar}${main}</div></div>`;
+  }
+
+  // ── Screen preview zoom ──────────────────────────────────────
+  function setupPreviewZoom() {
+    const shell = document.querySelector('.preview-shell');
+    const page  = document.querySelector('.resume-page');
+    const label = document.getElementById('zoom-label');
+    if (!shell || !page || !label) return;
+
+    const minScale = 0.45;
+    const maxScale = 1.8;
+    const step     = 0.1;
+    let autoFit    = true;
+    let scale      = 1;
+
+    function clamp(value) {
+      return Math.max(minScale, Math.min(maxScale, value));
+    }
+
+    function applyScale(nextScale) {
+      scale = clamp(nextScale);
+      shell.style.setProperty('--preview-scale', String(scale));
+      shell.style.width  = `${Math.ceil(page.offsetWidth * scale)}px`;
+      shell.style.height = `${Math.ceil(page.offsetHeight * scale)}px`;
+      label.textContent = `${Math.round(scale * 100)}%`;
+    }
+
+    function fitToWidth() {
+      const availableWidth = Math.max(320, window.innerWidth - 40);
+      const baseWidth = page.offsetWidth || 1;
+      applyScale(Math.min(1, availableWidth / baseWidth));
+    }
+
+    document.querySelectorAll('[data-zoom]').forEach(button => {
+      button.addEventListener('click', () => {
+        const action = button.getAttribute('data-zoom');
+        if (action === 'fit') {
+          autoFit = true;
+          fitToWidth();
+          return;
+        }
+        autoFit = false;
+        applyScale(scale + (action === 'in' ? step : -step));
+      });
+    });
+
+    window.addEventListener('resize', () => {
+      if (autoFit) fitToWidth();
+    });
+
+    requestAnimationFrame(fitToWidth);
   }
 
   // ── Bootstrap ────────────────────────────────────────────────
@@ -241,6 +292,7 @@
     const app  = document.getElementById('app');
     if (!app) throw new Error('Missing #app element');
     app.innerHTML = renderResume(data);
+    setupPreviewZoom();
 
     // Set page title from profile name if available
     if (data.profile && data.profile.name) {
