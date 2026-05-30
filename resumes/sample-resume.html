@@ -59,6 +59,7 @@ a:hover {
   display: grid;
   grid-template-columns: 19% 81%;
   position: relative;
+  background: #ffffff;
 }
 
 /* ── Sidebar ────────────────────────────────────────────────── */
@@ -147,6 +148,7 @@ a:hover {
 /* ── Main column ────────────────────────────────────────────── */
 .main {
   padding: 1.2cm 1.05cm 1.2cm 1.7cm;
+  background: #ffffff;
 }
 
 /* Main section heading with short underline */
@@ -413,9 +415,14 @@ a:hover {
 
 /* ── Screen-only shadow (preview comfort) ──────────────────── */
 @media screen {
+  html {
+    background: #e8e8e8;
+  }
+
   body {
     background: #e8e8e8;
     padding: 20px 0 40px;
+    min-width: calc(210mm + 40px);
   }
 
   .resume-page {
