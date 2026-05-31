@@ -233,6 +233,20 @@
     return `<div class="preview-shell"><div class="resume-page">${sidebar}${main}</div></div>`;
   }
 
+  // ── Theme presets ────────────────────────────────────────────
+  function applyTheme(theme) {
+    const fontPresets = {
+      system: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      modern: '"Helvetica Neue", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif',
+      serif: '"Songti SC", "STSong", "SimSun", serif',
+      compact: 'Arial, "Helvetica Neue", "Microsoft YaHei", sans-serif'
+    };
+
+    const selectedFont = theme && theme.font ? theme.font : 'modern';
+    const fontStack = fontPresets[selectedFont] || fontPresets.modern;
+    document.documentElement.style.setProperty('--font-stack', fontStack);
+  }
+
   // ── Screen preview zoom ──────────────────────────────────────
   function setupPreviewZoom() {
     const shell = document.querySelector('.preview-shell');
@@ -291,6 +305,7 @@
     const data = JSON.parse(dataEl.textContent);
     const app  = document.getElementById('app');
     if (!app) throw new Error('Missing #app element');
+    applyTheme(data.theme);
     app.innerHTML = renderResume(data);
     setupPreviewZoom();
 

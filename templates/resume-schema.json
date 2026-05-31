@@ -11,6 +11,19 @@
       "examples": ["resumes/photo.jpg", null]
     },
 
+    "theme": {
+      "$comment": "简历视觉主题配置。font 为受控字体预设，不允许直接写 CSS。",
+      "type": "object",
+      "properties": {
+        "font": {
+          "type": "string",
+          "enum": ["system", "modern", "serif", "compact"],
+          "description": "字体预设：system 系统默认，modern 现代无衬线，serif 衬线风格，compact 紧凑无衬线"
+        }
+      },
+      "additionalProperties": false
+    },
+
     "profile": {
       "$comment": "对应 \\profileHeader{name}{role}{tagline}",
       "type": "object",
