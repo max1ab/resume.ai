@@ -64,19 +64,21 @@ a:hover {
 
 /* Photo area */
 .photo-area {
-  width: 100%;
-  margin-bottom: 16pt;
+  width: 25mm;
+  height: 35mm;
+  margin: 0 auto 16pt;
 }
 
 .photo-area img {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
+  object-fit: cover;
 }
 
 .photo-placeholder {
   width: 100%;
-  aspect-ratio: 3 / 3.65;
+  height: 100%;
   border: 1px solid var(--linegray);
   display: flex;
   align-items: center;
@@ -108,7 +110,7 @@ a:hover {
 
 .profile-tagline {
   font-size: 8pt;
-  color: var(--muted);
+  color: var(--textgray);
   line-height: 1.5;
 }
 
@@ -140,7 +142,7 @@ a:hover {
 
 /* ── Main column ────────────────────────────────────────────── */
 .main {
-  padding: 1.2cm 1.05cm 1.2cm 0.7cm;
+  padding: 1.2cm 1.1cm 1.2cm 0.7cm;
   background: #ffffff;
 }
 
@@ -196,11 +198,12 @@ a:hover {
 }
 
 .project-main {
-  flex: 0 0 76%;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .project-meta {
-  flex: 0 0 18%;
+  flex: 0 0 20%;
   font-size: 8pt;
   color: var(--muted);
   padding-top: 2pt;
@@ -223,7 +226,7 @@ a:hover {
 }
 
 .project-image {
-  flex: 0 0 18%;
+  flex: 0 0 20%;
   padding-top: 0;
 }
 
