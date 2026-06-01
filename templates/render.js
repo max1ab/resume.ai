@@ -230,7 +230,7 @@
   function renderResume(data) {
     const sidebar = renderSidebar(data);
     const main    = renderMain(data);
-    return `<div class="preview-shell"><div class="resume-page">${sidebar}${main}</div></div>`;
+    return `<div class="preview-shell"><div class="resume-page">${sidebar}${main}<div class="a4-limit-line" aria-hidden="true"><span>A4</span></div></div></div>`;
   }
 
   // ── Theme presets ────────────────────────────────────────────
@@ -241,7 +241,6 @@
       serif: '"Songti SC", "STSong", "SimSun", serif',
       compact: 'Arial, "Helvetica Neue", "Microsoft YaHei", sans-serif'
     };
-
     const selectedFont = theme && theme.font ? theme.font : 'modern';
     const fontStack = fontPresets[selectedFont] || fontPresets.modern;
     document.documentElement.style.setProperty('--font-stack', fontStack);
@@ -298,6 +297,37 @@
     requestAnimationFrame(fitToWidth);
   }
 
+  // ── Layout warnings ─────────────────────────────────────────
+  function setupLayoutWarnings() {
+    const page = document.querySelector('.resume-page');
+    const warning = document.getElementById('layout-warning');
+    if (!page || !warning) return;
+
+    function checkOverflow() {
+      const a4Height = page.offsetWidth * 297 / 210;
+      const contentHeight = page.scrollHeight;
+      const overflowPx = contentHeight - a4Height;
+
+      if (overflowPx > 2) {
+        const overflowMm = overflowPx / page.offsetWidth * 210;
+        warning.hidden = false;
+        warning.textContent = `超出 ${Math.ceil(overflowMm)}mm`;
+        warning.title = `内容高度约 ${(contentHeight / page.offsetWidth * 210).toFixed(1)}mm，A4 高度为 297mm。`;
+      } else {
+        warning.hidden = true;
+        warning.textContent = '';
+        warning.removeAttribute('title');
+      }
+    }
+
+    window.addEventListener('resize', checkOverflow);
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(checkOverflow).observe(page);
+    }
+    requestAnimationFrame(checkOverflow);
+    window.addEventListener('load', checkOverflow);
+  }
+
   // ── Bootstrap ────────────────────────────────────────────────
   try {
     const dataEl = document.getElementById('resume-data');
@@ -308,6 +338,7 @@
     applyTheme(data.theme);
     app.innerHTML = renderResume(data);
     setupPreviewZoom();
+    setupLayoutWarnings();
 
     // Set page title from profile name if available
     if (data.profile && data.profile.name) {

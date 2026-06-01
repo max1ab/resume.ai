@@ -425,6 +425,14 @@ a:hover {
   .render-warning {
     display: none;
   }
+
+  .layout-warning {
+    display: none;
+  }
+
+  .a4-limit-line {
+    display: none;
+  }
 }
 
 /* ── Screen-only shadow (preview comfort) ──────────────────── */
@@ -482,6 +490,18 @@ a:hover {
     font: 600 12px var(--font-stack);
   }
 
+  .layout-warning {
+    padding: 0 8px;
+    border-left: 1px solid var(--linegray);
+    color: #b91c1c;
+    font: 600 12px var(--font-stack);
+    white-space: nowrap;
+  }
+
+  .layout-warning[hidden] {
+    display: none;
+  }
+
   .preview-shell {
     --preview-scale: 1;
     position: relative;
@@ -496,6 +516,27 @@ a:hover {
     transform: scale(var(--preview-scale));
     transform-origin: top left;
   }
+
+  .a4-limit-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 297mm;
+    z-index: 3;
+    border-top: 1px dashed #b91c1c;
+    color: #b91c1c;
+    pointer-events: none;
+  }
+
+  .a4-limit-line span {
+    position: absolute;
+    top: -9px;
+    right: 6px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: #fff5f5;
+    font: 600 9px var(--font-stack);
+  }
 }
 
 </style>
@@ -506,6 +547,7 @@ a:hover {
     <button type="button" data-zoom="fit" title="适应宽度">适应宽度</button>
     <span id="zoom-label">100%</span>
     <button type="button" data-zoom="in" title="放大">+</button>
+    <span id="layout-warning" class="layout-warning" hidden></span>
   </div>
   <div id="app"></div>
   <script type="application/json" id="resume-data">{
@@ -888,7 +930,20 @@ a:hover {
   function renderResume(data) {
     const sidebar = renderSidebar(data);
     const main    = renderMain(data);
-    return `<div class="preview-shell"><div class="resume-page">${sidebar}${main}</div></div>`;
+    return `<div class="preview-shell"><div class="resume-page">${sidebar}${main}<div class="a4-limit-line" aria-hidden="true"><span>A4</span></div></div></div>`;
+  }
+
+  // ── Theme presets ────────────────────────────────────────────
+  function applyTheme(theme) {
+    const fontPresets = {
+      system: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      modern: '"Helvetica Neue", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif',
+      serif: '"Songti SC", "STSong", "SimSun", serif',
+      compact: 'Arial, "Helvetica Neue", "Microsoft YaHei", sans-serif'
+    };
+    const selectedFont = theme && theme.font ? theme.font : 'modern';
+    const fontStack = fontPresets[selectedFont] || fontPresets.modern;
+    document.documentElement.style.setProperty('--font-stack', fontStack);
   }
 
   // ── Screen preview zoom ──────────────────────────────────────
@@ -942,6 +997,37 @@ a:hover {
     requestAnimationFrame(fitToWidth);
   }
 
+  // ── Layout warnings ─────────────────────────────────────────
+  function setupLayoutWarnings() {
+    const page = document.querySelector('.resume-page');
+    const warning = document.getElementById('layout-warning');
+    if (!page || !warning) return;
+
+    function checkOverflow() {
+      const a4Height = page.offsetWidth * 297 / 210;
+      const contentHeight = page.scrollHeight;
+      const overflowPx = contentHeight - a4Height;
+
+      if (overflowPx > 2) {
+        const overflowMm = overflowPx / page.offsetWidth * 210;
+        warning.hidden = false;
+        warning.textContent = `超出 ${Math.ceil(overflowMm)}mm`;
+        warning.title = `内容高度约 ${(contentHeight / page.offsetWidth * 210).toFixed(1)}mm，A4 高度为 297mm。`;
+      } else {
+        warning.hidden = true;
+        warning.textContent = '';
+        warning.removeAttribute('title');
+      }
+    }
+
+    window.addEventListener('resize', checkOverflow);
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(checkOverflow).observe(page);
+    }
+    requestAnimationFrame(checkOverflow);
+    window.addEventListener('load', checkOverflow);
+  }
+
   // ── Bootstrap ────────────────────────────────────────────────
   try {
     const dataEl = document.getElementById('resume-data');
@@ -949,8 +1035,10 @@ a:hover {
     const data = JSON.parse(dataEl.textContent);
     const app  = document.getElementById('app');
     if (!app) throw new Error('Missing #app element');
+    applyTheme(data.theme);
     app.innerHTML = renderResume(data);
     setupPreviewZoom();
+    setupLayoutWarnings();
 
     // Set page title from profile name if available
     if (data.profile && data.profile.name) {

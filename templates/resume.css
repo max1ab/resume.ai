@@ -418,6 +418,14 @@ a:hover {
   .render-warning {
     display: none;
   }
+
+  .layout-warning {
+    display: none;
+  }
+
+  .a4-limit-line {
+    display: none;
+  }
 }
 
 /* ── Screen-only shadow (preview comfort) ──────────────────── */
@@ -475,6 +483,18 @@ a:hover {
     font: 600 12px var(--font-stack);
   }
 
+  .layout-warning {
+    padding: 0 8px;
+    border-left: 1px solid var(--linegray);
+    color: #b91c1c;
+    font: 600 12px var(--font-stack);
+    white-space: nowrap;
+  }
+
+  .layout-warning[hidden] {
+    display: none;
+  }
+
   .preview-shell {
     --preview-scale: 1;
     position: relative;
@@ -488,5 +508,26 @@ a:hover {
     box-shadow: 0 2px 12px rgba(0,0,0,0.12);
     transform: scale(var(--preview-scale));
     transform-origin: top left;
+  }
+
+  .a4-limit-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 297mm;
+    z-index: 3;
+    border-top: 1px dashed #b91c1c;
+    color: #b91c1c;
+    pointer-events: none;
+  }
+
+  .a4-limit-line span {
+    position: absolute;
+    top: -9px;
+    right: 6px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: #fff5f5;
+    font: 600 9px var(--font-stack);
   }
 }
