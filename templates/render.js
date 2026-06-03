@@ -300,12 +300,18 @@
   // ── Layout warnings ─────────────────────────────────────────
   function setupLayoutWarnings() {
     const page = document.querySelector('.resume-page');
+    const sidebar = document.querySelector('.sidebar');
+    const main = document.querySelector('.main');
     const warning = document.getElementById('layout-warning');
-    if (!page || !warning) return;
+    const limitLine = document.querySelector('.a4-limit-line');
+    if (!page || !sidebar || !main || !warning) return;
 
     function checkOverflow() {
       const a4Height = page.offsetWidth * 297 / 210;
-      const contentHeight = page.scrollHeight;
+      const contentHeight = Math.max(
+        sidebar.offsetTop + sidebar.scrollHeight,
+        main.offsetTop + main.scrollHeight
+      );
       const overflowPx = contentHeight - a4Height;
 
       if (overflowPx > 2) {
@@ -313,10 +319,12 @@
         warning.hidden = false;
         warning.textContent = `超出 ${Math.ceil(overflowMm)}mm`;
         warning.title = `内容高度约 ${(contentHeight / page.offsetWidth * 210).toFixed(1)}mm，A4 高度为 297mm。`;
+        if (limitLine) limitLine.hidden = false;
       } else {
         warning.hidden = true;
         warning.textContent = '';
         warning.removeAttribute('title');
+        if (limitLine) limitLine.hidden = true;
       }
     }
 
@@ -326,6 +334,37 @@
     }
     requestAnimationFrame(checkOverflow);
     window.addEventListener('load', checkOverflow);
+  }
+
+  // ── Print export ────────────────────────────────────────────
+  function setupPrintExport() {
+    const printButton = document.querySelector('[data-print]');
+    const confirmButton = document.querySelector('[data-print-confirm]');
+    const hint = document.getElementById('print-hint');
+    if (!printButton) return;
+
+    function openPrintDialog() {
+      if (hint) {
+        hint.hidden = true;
+      }
+      window.print();
+    }
+
+    printButton.addEventListener('click', () => {
+      if (!hint) {
+        openPrintDialog();
+        return;
+      }
+      hint.hidden = false;
+    });
+
+    if (confirmButton) {
+      confirmButton.addEventListener('click', openPrintDialog);
+    }
+
+    window.addEventListener('afterprint', () => {
+      if (hint) hint.hidden = true;
+    });
   }
 
   // ── Bootstrap ────────────────────────────────────────────────
@@ -339,6 +378,7 @@
     app.innerHTML = renderResume(data);
     setupPreviewZoom();
     setupLayoutWarnings();
+    setupPrintExport();
 
     // Set page title from profile name if available
     if (data.profile && data.profile.name) {

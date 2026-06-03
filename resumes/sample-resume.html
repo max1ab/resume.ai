@@ -381,7 +381,8 @@ a:hover {
     background: #ffffff;
   }
 
-  .preview-toolbar {
+  .preview-toolbar,
+  .print-hint {
     display: none;
   }
 
@@ -483,6 +484,63 @@ a:hover {
     background: #f6f6f5;
   }
 
+  .preview-toolbar button[data-print] {
+    color: #ffffff;
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  .preview-toolbar button[data-print]:hover {
+    background: var(--textgray);
+  }
+
+  .print-hint {
+    position: fixed;
+    top: 58px;
+    left: 50%;
+    z-index: 10;
+    display: grid;
+    gap: 2px;
+    min-width: 260px;
+    padding: 8px 10px;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 6px;
+    background: rgba(255,255,255,0.96);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    color: var(--textgray);
+    font: 12px var(--font-stack);
+    transform: translateX(-50%);
+  }
+
+  .print-hint strong {
+    font-size: 12px;
+  }
+
+  .print-hint span {
+    color: var(--muted);
+  }
+
+  .print-hint button {
+    justify-self: end;
+    height: 26px;
+    margin-top: 4px;
+    padding: 0 10px;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    background: var(--accent);
+    color: #ffffff;
+    font: 600 12px var(--font-stack);
+    cursor: pointer;
+  }
+
+  .print-hint button:hover {
+    background: var(--textgray);
+  }
+
+  .print-hint[hidden] {
+    display: none;
+  }
+
   #zoom-label {
     min-width: 44px;
     text-align: center;
@@ -528,6 +586,10 @@ a:hover {
     pointer-events: none;
   }
 
+  .a4-limit-line[hidden] {
+    display: none;
+  }
+
   .a4-limit-line span {
     position: absolute;
     top: -9px;
@@ -542,12 +604,18 @@ a:hover {
 </style>
 </head>
 <body>
-  <div class="preview-toolbar" aria-label="预览缩放控制">
+  <div class="preview-toolbar" aria-label="简历预览工具栏">
+    <button type="button" data-print title="导出 PDF">导出 PDF</button>
     <button type="button" data-zoom="out" title="缩小">−</button>
     <button type="button" data-zoom="fit" title="适应宽度">适应宽度</button>
     <span id="zoom-label">100%</span>
     <button type="button" data-zoom="in" title="放大">+</button>
     <span id="layout-warning" class="layout-warning" hidden></span>
+  </div>
+  <div id="print-hint" class="print-hint" hidden>
+    <strong>保存 PDF 设置</strong>
+    <span>纸张 A4 · 边距无 · 背景图形开启 · 页眉页脚关闭</span>
+    <button type="button" data-print-confirm>继续打开打印</button>
   </div>
   <div id="app"></div>
   <script type="application/json" id="resume-data">{
@@ -1000,12 +1068,18 @@ a:hover {
   // ── Layout warnings ─────────────────────────────────────────
   function setupLayoutWarnings() {
     const page = document.querySelector('.resume-page');
+    const sidebar = document.querySelector('.sidebar');
+    const main = document.querySelector('.main');
     const warning = document.getElementById('layout-warning');
-    if (!page || !warning) return;
+    const limitLine = document.querySelector('.a4-limit-line');
+    if (!page || !sidebar || !main || !warning) return;
 
     function checkOverflow() {
       const a4Height = page.offsetWidth * 297 / 210;
-      const contentHeight = page.scrollHeight;
+      const contentHeight = Math.max(
+        sidebar.offsetTop + sidebar.scrollHeight,
+        main.offsetTop + main.scrollHeight
+      );
       const overflowPx = contentHeight - a4Height;
 
       if (overflowPx > 2) {
@@ -1013,10 +1087,12 @@ a:hover {
         warning.hidden = false;
         warning.textContent = `超出 ${Math.ceil(overflowMm)}mm`;
         warning.title = `内容高度约 ${(contentHeight / page.offsetWidth * 210).toFixed(1)}mm，A4 高度为 297mm。`;
+        if (limitLine) limitLine.hidden = false;
       } else {
         warning.hidden = true;
         warning.textContent = '';
         warning.removeAttribute('title');
+        if (limitLine) limitLine.hidden = true;
       }
     }
 
@@ -1026,6 +1102,37 @@ a:hover {
     }
     requestAnimationFrame(checkOverflow);
     window.addEventListener('load', checkOverflow);
+  }
+
+  // ── Print export ────────────────────────────────────────────
+  function setupPrintExport() {
+    const printButton = document.querySelector('[data-print]');
+    const confirmButton = document.querySelector('[data-print-confirm]');
+    const hint = document.getElementById('print-hint');
+    if (!printButton) return;
+
+    function openPrintDialog() {
+      if (hint) {
+        hint.hidden = true;
+      }
+      window.print();
+    }
+
+    printButton.addEventListener('click', () => {
+      if (!hint) {
+        openPrintDialog();
+        return;
+      }
+      hint.hidden = false;
+    });
+
+    if (confirmButton) {
+      confirmButton.addEventListener('click', openPrintDialog);
+    }
+
+    window.addEventListener('afterprint', () => {
+      if (hint) hint.hidden = true;
+    });
   }
 
   // ── Bootstrap ────────────────────────────────────────────────
@@ -1039,6 +1146,7 @@ a:hover {
     app.innerHTML = renderResume(data);
     setupPreviewZoom();
     setupLayoutWarnings();
+    setupPrintExport();
 
     // Set page title from profile name if available
     if (data.profile && data.profile.name) {
