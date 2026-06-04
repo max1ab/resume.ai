@@ -44,6 +44,8 @@ resume.ai/
 │   └── photo.jpg               你的个人照片（gitignore 忽略）
 ├── scripts/
 │   └── build.mjs               构建脚本（纯 Node stdlib，无 npm 依赖）
+├── skills/
+│   └── resume-writer/SKILL.md  给 AI agent 的简历写作规则
 └── legacy/                     归档的 LaTeX 方案（见 legacy/README.md）
 ```
 
@@ -108,6 +110,8 @@ node scripts/build.mjs resumes/ai-engineer.json --watch
 ```
 
 ## 给 Agent 的建议
+
+更完整的 agent 工作流见 [`skills/resume-writer/SKILL.md`](skills/resume-writer/SKILL.md)。
 
 - 不要修改 `templates/`，除非明确要调整整体版式。
 - 新简历从 `resumes/sample-resume.json` 复制并修改内容。
