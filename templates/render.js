@@ -230,7 +230,10 @@
   function renderResume(data) {
     const sidebar = renderSidebar(data);
     const main    = renderMain(data);
-    return `<div class="preview-shell"><div class="resume-page">${sidebar}${main}<div class="a4-limit-line" aria-hidden="true"><span>A4</span></div></div></div>`;
+    const layout = data.theme && data.theme.layout === 'sidebar-right'
+      ? ' layout-sidebar-right'
+      : '';
+    return `<div class="preview-shell"><div class="resume-page${layout}">${sidebar}${main}<div class="a4-limit-line" aria-hidden="true"><span>A4</span></div></div></div>`;
   }
 
   // ── Theme presets ────────────────────────────────────────────

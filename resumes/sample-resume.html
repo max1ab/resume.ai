@@ -62,11 +62,20 @@ a:hover {
   background: #ffffff;
 }
 
+.resume-page.layout-sidebar-right {
+  grid-template-columns: 75% 25%;
+}
+
 /* ── Sidebar ────────────────────────────────────────────────── */
 .sidebar {
   background: var(--sidebg);
   padding: 1.2cm 1.05cm 1.2cm 1.05cm;
   min-height: 297mm;
+}
+
+.layout-sidebar-right .sidebar {
+  grid-column: 2;
+  grid-row: 1;
 }
 
 /* Photo area */
@@ -151,6 +160,12 @@ a:hover {
 .main {
   padding: 1.2cm 1.1cm 1.2cm 0.7cm;
   background: #ffffff;
+}
+
+.layout-sidebar-right .main {
+  grid-column: 1;
+  grid-row: 1;
+  padding: 1.2cm 0.7cm 1.2cm 1.1cm;
 }
 
 /* Main section heading with short underline */
@@ -998,7 +1013,10 @@ a:hover {
   function renderResume(data) {
     const sidebar = renderSidebar(data);
     const main    = renderMain(data);
-    return `<div class="preview-shell"><div class="resume-page">${sidebar}${main}<div class="a4-limit-line" aria-hidden="true"><span>A4</span></div></div></div>`;
+    const layout = data.theme && data.theme.layout === 'sidebar-right'
+      ? ' layout-sidebar-right'
+      : '';
+    return `<div class="preview-shell"><div class="resume-page${layout}">${sidebar}${main}<div class="a4-limit-line" aria-hidden="true"><span>A4</span></div></div></div>`;
   }
 
   // ── Theme presets ────────────────────────────────────────────

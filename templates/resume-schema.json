@@ -19,6 +19,11 @@
           "type": "string",
           "enum": ["system", "modern", "serif", "compact"],
           "description": "字体预设：system 系统默认，modern 现代无衬线，serif 衬线风格，compact 紧凑无衬线"
+        },
+        "layout": {
+          "type": "string",
+          "enum": ["sidebar-left", "sidebar-right"],
+          "description": "双栏布局方向：sidebar-left 左侧栏，sidebar-right 右侧栏"
         }
       },
       "additionalProperties": false
