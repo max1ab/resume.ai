@@ -196,6 +196,10 @@ a:hover {
   margin-top: 0;
 }
 
+.item-divider + .main-section {
+  margin-top: 0;
+}
+
 .main-section-title {
   font-size: 14pt;
   font-weight: 700;
@@ -235,7 +239,6 @@ a:hover {
   display: flex;
   gap: 1.5%;
   align-items: flex-start;
-  padding-bottom: var(--item-sep);
 }
 
 .project-main {
@@ -279,10 +282,23 @@ a:hover {
 }
 
 .project-title {
+  display: flex;
+  align-items: baseline;
+  gap: 5pt;
   font-size: 11pt;
   font-weight: 700;
   color: var(--textgray);
   margin-bottom: var(--inner-sep);
+}
+
+.project-title::before {
+  content: "";
+  width: 5pt;
+  height: 5pt;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translateY(-0.6pt);
 }
 
 .project-desc {
@@ -304,7 +320,7 @@ a:hover {
 .item-divider {
   border: none;
   border-top: 0.4pt solid var(--linegray);
-  margin: var(--item-sep) 0 var(--inner-sep);
+  margin: var(--item-sep) 0 10pt;
 }
 
 /* ── Inline tag chip ────────────────────────────────────────── */
@@ -320,7 +336,19 @@ a:hover {
 
 /* ── Dated item (experience / education) ────────────────────── */
 .dated-item {
-  padding-bottom: var(--item-sep);
+  position: relative;
+  padding-left: 13pt;
+}
+
+.dated-item::after {
+  content: "";
+  position: absolute;
+  left: 0.8pt;
+  top: 4.4pt;
+  width: 5pt;
+  height: 5pt;
+  border-radius: 50%;
+  background: var(--accent);
 }
 
 .dated-header {

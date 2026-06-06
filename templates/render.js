@@ -140,7 +140,7 @@
     const paragraphs = (section.paragraphs || [])
       .map(p => `<p>${escapeHTML(p)}</p>`)
       .join('');
-    return `${heading}<div class="body-text">${paragraphs}</div>`;
+    return `${heading}<div class="body-text">${paragraphs}</div><hr class="item-divider" />`;
   }
 
   // ── projects ─────────────────────────────────────────────────
@@ -282,7 +282,7 @@
         textgray: '#3F3F3F',
         muted: '#727272',
         tagbg: '#E9E9E7',
-        accent: '#000000'
+        accent: '#333333'
       },
       'classic-blue': {
         sidebg: '#F4F8FE',
