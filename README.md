@@ -118,7 +118,9 @@ node scripts/build.mjs --standalone-template
     { "title": "关于我",   "type": "body",       "paragraphs": ["..."] },
     { "title": "代表项目", "type": "projects",   "items": [...] },
     { "title": "经历",     "type": "experience", "items": [...] },
-    { "title": "方法与优势","type": "methods",    "items": [...] }
+    { "title": "作品展示", "type": "projects",   "items": [
+      { "title": "带图片的项目", "description": "...", "image": "project.png" }
+    ] }
   ]
 }
 ```

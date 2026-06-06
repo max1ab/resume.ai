@@ -25,6 +25,10 @@
   --section-sep: 8pt;
   --item-sep:    6pt;
   --inner-sep:   4pt;
+
+  --font-large:  16pt;
+  --font-medium: 12pt;
+  --font-small:  10pt;
 }
 
 /* ── Reset & Base ───────────────────────────────────────────── */
@@ -69,7 +73,7 @@ a:hover {
 /* ── Sidebar ────────────────────────────────────────────────── */
 .sidebar {
   background: var(--sidebg);
-  padding: 1.2cm 1.05cm 1.2cm 1.05cm;
+  padding: 1.2cm 8.5mm 1.2cm 8.5mm;
   min-height: 297mm;
 }
 
@@ -100,7 +104,7 @@ a:hover {
   align-items: center;
   justify-content: center;
   color: var(--muted);
-  font-size: 8pt;
+  font-size: var(--font-small);
   background: #ffffff;
 }
 
@@ -110,7 +114,7 @@ a:hover {
 }
 
 .profile-name {
-  font-size: 18pt;
+  font-size: var(--font-large);
   font-weight: 700;
   color: var(--textgray);
   line-height: 1.2;
@@ -118,14 +122,14 @@ a:hover {
 }
 
 .profile-role {
-  font-size: 11pt;
+  font-size: var(--font-medium);
   font-weight: 700;
   color: var(--accent);
   margin-bottom: 8pt;
 }
 
 .profile-tagline {
-  font-size: 8pt;
+  font-size: var(--font-small);
   color: var(--textgray);
   line-height: 1.5;
 }
@@ -142,7 +146,7 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 5pt;
-  font-size: 11pt;
+  font-size: var(--font-medium);
   font-weight: 700;
   color: var(--textgray);
   margin-bottom: var(--inner-sep);
@@ -172,7 +176,7 @@ a:hover {
 }
 
 .side-section-body {
-  font-size: 8pt;
+  font-size: var(--font-small);
   line-height: 1.5;
   color: var(--textgray);
 }
@@ -220,7 +224,7 @@ a:hover {
   height: 1.8pt;
   background: var(--accent);
   margin-top: 2pt;
-  margin-bottom: 7pt;
+  margin-bottom: 14pt;
 }
 
 /* Section divider in main column */
@@ -232,7 +236,7 @@ a:hover {
 
 /* ── Body text ──────────────────────────────────────────────── */
 .body-text {
-  font-size: 8.5pt;
+  font-size: var(--font-small);
   line-height: 1.5;
   color: var(--textgray);
 }
@@ -255,7 +259,7 @@ a:hover {
 
 .project-meta {
   flex: 0 0 20%;
-  font-size: 8pt;
+  font-size: var(--font-small);
   color: var(--muted);
   padding-top: 2pt;
   text-align: right;
@@ -265,13 +269,13 @@ a:hover {
 .project-meta-label {
   display: block;
   color: var(--muted);
-  font-size: 7.5pt;
+  font-size: var(--font-small);
 }
 
 .project-meta-value {
   display: block;
   color: var(--textgray);
-  font-size: 8pt;
+  font-size: var(--font-small);
   margin-top: var(--inner-sep);
   word-break: break-all;
 }
@@ -292,7 +296,7 @@ a:hover {
   display: flex;
   align-items: baseline;
   gap: 5pt;
-  font-size: 11pt;
+  font-size: var(--font-medium);
   font-weight: 700;
   color: var(--textgray);
   margin-bottom: var(--inner-sep);
@@ -309,7 +313,7 @@ a:hover {
 }
 
 .project-desc {
-  font-size: 8.5pt;
+  font-size: var(--font-small);
   line-height: 1.5;
   color: var(--textgray);
   margin-bottom: 5pt;
@@ -337,7 +341,7 @@ a:hover {
   border-radius: 3pt;
   background: var(--tagbg);
   color: var(--muted);
-  font-size: 7.5pt;
+  font-size: var(--font-small);
   line-height: 1.4;
 }
 
@@ -366,20 +370,20 @@ a:hover {
 }
 
 .dated-title {
-  font-size: 11pt;
+  font-size: var(--font-medium);
   font-weight: 700;
   color: var(--textgray);
 }
 
 .dated-date {
-  font-size: 8pt;
+  font-size: var(--font-small);
   color: var(--muted);
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .dated-summary {
-  font-size: 8.5pt;
+  font-size: var(--font-small);
   line-height: 1.5;
   color: var(--textgray);
   margin-top: var(--item-sep);
@@ -392,7 +396,7 @@ a:hover {
 }
 
 .dated-bullets li {
-  font-size: 8.5pt;
+  font-size: var(--font-small);
   line-height: 1.5;
   color: var(--textgray);
   margin-bottom: 2pt;
@@ -410,14 +414,14 @@ a:hover {
 }
 
 .method-number {
-  font-size: 14pt;
+  font-size: var(--font-large);
   font-weight: 700;
   color: var(--textgray);
   line-height: 1.1;
 }
 
 .method-label {
-  font-size: 8.5pt;
+  font-size: var(--font-medium);
   font-weight: 700;
   color: var(--textgray);
   margin-top: var(--inner-sep);
@@ -425,7 +429,7 @@ a:hover {
 }
 
 .method-text {
-  font-size: 7pt;
+  font-size: var(--font-small);
   line-height: 1.5;
   color: var(--muted);
 }
@@ -435,7 +439,7 @@ a:hover {
   padding: 6pt 8pt;
   border: 1px solid #b91c1c;
   color: #b91c1c;
-  font-size: 8pt;
+  font-size: var(--font-small);
   font-family: var(--font-stack);
 }
 

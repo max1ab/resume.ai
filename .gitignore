@@ -11,6 +11,7 @@ resumes/*.html
 resumes/*
 !resumes/sample-resume.json
 !resumes/sample-photo.jpg
+!resumes/sample-project.svg
 !resumes/sample-resume.html
 
 # ── Node ────────────────────────────────────────────────────
