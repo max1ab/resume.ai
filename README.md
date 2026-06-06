@@ -36,7 +36,8 @@ resume.ai/
 │   ├── resume.html             HTML 骨架（含三个构建占位符）
 │   ├── resume.css              双栏布局样式
 │   ├── render.js               Vanilla JS 渲染器
-│   └── resume-schema.json      JSON 数据结构说明
+│   ├── resume-schema.json      JSON 数据结构说明
+│   └── resume-standalone.html  无 Node 备用模板
 ├── resumes/
 │   ├── sample-resume.json      示例简历数据
 │   ├── sample-photo.jpg        示例头像
@@ -81,6 +82,14 @@ node scripts/build.mjs resumes/ai-engineer.json --watch
 ```
 
 构建完成后，用浏览器打开对应 `.html` 文件即可预览。使用浏览器的打印功能（`Cmd+P` / `Ctrl+P`）可导出为 PDF。
+
+生成无 Node 备用模板：
+
+```bash
+node scripts/build.mjs --standalone-template
+```
+
+如果目标环境没有 Node.js，可以复制 `templates/resume-standalone.html` 到 `resumes/<name>.html`，再把里面的 `__RESUME_DATA__` 替换成简历 JSON。替换前需要把 JSON 文本中的 `<`、`>`、`&` 分别替换为 `\u003c`、`\u003e`、`\u0026`，避免破坏 HTML 的 JSON 数据块。
 
 ## JSON 数据结构
 

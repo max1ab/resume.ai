@@ -5,6 +5,7 @@
  * Usage:
  *   node scripts/build.mjs resumes/sample-resume.json
  *   node scripts/build.mjs resumes/ai-engineer.json --watch
+ *   node scripts/build.mjs --standalone-template
  *
  * Produces: resumes/<name>.html  (self-contained, no CDN dependencies)
  */
@@ -20,10 +21,17 @@ const TEMPLATES = path.join(ROOT, 'templates');
 // ── Argument parsing ─────────────────────────────────────────
 const args      = process.argv.slice(2);
 const watchMode = args.includes('--watch');
+const standaloneTemplateMode = args.includes('--standalone-template');
 const jsonArg   = args.find(a => !a.startsWith('--'));
+
+if (standaloneTemplateMode) {
+  buildStandaloneTemplate();
+  process.exit(0);
+}
 
 if (!jsonArg) {
   console.error('Usage: node scripts/build.mjs <path-to-resume.json> [--watch]');
+  console.error('       node scripts/build.mjs --standalone-template');
   process.exit(1);
 }
 
@@ -44,9 +52,6 @@ const htmlPath = jsonPath.slice(0, -5) + '.html';
 // ── Core build function ──────────────────────────────────────
 function build() {
   try {
-    const tpl  = fs.readFileSync(path.join(TEMPLATES, 'resume.html'), 'utf8');
-    const css  = fs.readFileSync(path.join(TEMPLATES, 'resume.css'),  'utf8');
-    const js   = fs.readFileSync(path.join(TEMPLATES, 'render.js'),   'utf8');
     const data = fs.readFileSync(jsonPath, 'utf8');
 
     // Parse once; validate and use the same object throughout
@@ -60,20 +65,7 @@ function build() {
       .replace(/>/g, '\\u003e')
       .replace(/&/g, '\\u0026');
 
-    // Escape closing tags so inline CSS/JS cannot break out of their containers
-    const safeCss = css.replace(/<\/style>/gi, '<\\/style>');
-    const safeJs  = js.replace(/<\/script>/gi, '<\\/script>');
-
-    const out = tpl
-      .replace(
-        /<link\s+rel="stylesheet"\s+href="resume\.css"\s*\/>/,
-        `<style>\n${safeCss}\n</style>`
-      )
-      .replace(
-        /<script\s+src="render\.js"><\/script>/,
-        `<script>\n${safeJs}\n</script>`
-      )
-      .replace('__RESUME_DATA__', embeddedData);
+    const out = inlineAssets().replace('__RESUME_DATA__', embeddedData);
 
     fs.writeFileSync(htmlPath, out, 'utf8');
     const ts = new Date().toLocaleTimeString('zh-CN');
@@ -82,6 +74,32 @@ function build() {
     console.error(`Build error: ${err.message}`);
     if (!watchMode) process.exit(1);
   }
+}
+
+function inlineAssets() {
+  const tpl = fs.readFileSync(path.join(TEMPLATES, 'resume.html'), 'utf8');
+  const css = fs.readFileSync(path.join(TEMPLATES, 'resume.css'), 'utf8');
+  const js = fs.readFileSync(path.join(TEMPLATES, 'render.js'), 'utf8');
+
+  // Escape closing tags so inline CSS/JS cannot break out of their containers.
+  const safeCss = css.replace(/<\/style>/gi, '<\\/style>');
+  const safeJs = js.replace(/<\/script>/gi, '<\\/script>');
+
+  return tpl
+    .replace(
+      /<link\s+rel="stylesheet"\s+href="resume\.css"\s*\/>/,
+      `<style>\n${safeCss}\n</style>`
+    )
+    .replace(
+      /<script\s+src="render\.js"><\/script>/,
+      `<script>\n${safeJs}\n</script>`
+    );
+}
+
+function buildStandaloneTemplate() {
+  const outPath = path.join(TEMPLATES, 'resume-standalone.html');
+  fs.writeFileSync(outPath, inlineAssets(), 'utf8');
+  console.log(`Built → ${path.relative(ROOT, outPath)}`);
 }
 
 /**
