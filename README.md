@@ -98,6 +98,11 @@ node scripts/build.mjs --standalone-template
 ```json
 {
   "photo": "resumes/photo.jpg",
+  "theme": {
+    "font": "modern",
+    "layout": "sidebar-left",
+    "color": "classic-blue"
+  },
   "profile": {
     "name": "姓名",
     "role": "目标岗位",
@@ -115,6 +120,27 @@ node scripts/build.mjs --standalone-template
     { "title": "经历",     "type": "experience", "items": [...] },
     { "title": "方法与优势","type": "methods",    "items": [...] }
   ]
+}
+```
+
+`theme.color` 支持：
+
+```text
+neutral / classic-blue / academic-red / business-green / creative-orange
+```
+
+也可以用 `theme.colors` 覆盖少量颜色 token，值必须是 hex 色值：
+
+```json
+{
+  "theme": {
+    "color": "classic-blue",
+    "colors": {
+      "accent": "#245B82",
+      "sidebg": "#F4F8FA",
+      "tagbg": "#E8F0F7"
+    }
+  }
 }
 ```
 

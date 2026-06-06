@@ -24,6 +24,24 @@
           "type": "string",
           "enum": ["sidebar-left", "sidebar-right"],
           "description": "双栏布局方向：sidebar-left 左侧栏，sidebar-right 右侧栏"
+        },
+        "color": {
+          "type": "string",
+          "enum": ["neutral", "classic-blue", "academic-red", "business-green", "creative-orange"],
+          "description": "配色预设：neutral 默认灰黑，classic-blue 经典蓝，academic-red 学术红，business-green 商务绿，creative-orange 创意橙"
+        },
+        "colors": {
+          "type": "object",
+          "description": "可选的自定义主题色，仅允许覆盖白名单颜色 token，值必须是 hex 色值。",
+          "properties": {
+            "sidebg": { "type": "string", "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$" },
+            "linegray": { "type": "string", "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$" },
+            "textgray": { "type": "string", "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$" },
+            "muted": { "type": "string", "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$" },
+            "tagbg": { "type": "string", "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$" },
+            "accent": { "type": "string", "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$" }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false
@@ -47,6 +65,11 @@
         "type": "object",
         "properties": {
           "title": { "type": "string", "description": "侧栏分块标题，如“基本信息”、“联系方式”" },
+          "icon": {
+            "type": "string",
+            "enum": ["user", "contact", "skills", "education", "info", "briefcase", "award"],
+            "description": "可选图标；省略时会按标题自动匹配"
+          },
           "lines": {
             "$comment": "每行可以是纯文本字符串，或带链接的对象 { text, url }",
             "type": "array",

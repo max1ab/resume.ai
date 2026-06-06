@@ -105,7 +105,7 @@ a:hover {
 .profile-name {
   font-size: 18pt;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--textgray);
   line-height: 1.2;
   margin-bottom: 10pt;
 }
@@ -113,7 +113,7 @@ a:hover {
 .profile-role {
   font-size: 11pt;
   font-weight: 700;
-  color: var(--textgray);
+  color: var(--accent);
   margin-bottom: 8pt;
 }
 
@@ -132,10 +132,36 @@ a:hover {
 
 /* Sidebar section */
 .side-section-title {
+  display: flex;
+  align-items: center;
+  gap: 5pt;
   font-size: 11pt;
   font-weight: 700;
   color: var(--textgray);
   margin-bottom: var(--inner-sep);
+}
+
+.section-icon {
+  width: 13pt;
+  height: 13pt;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  color: #ffffff;
+  background: var(--accent);
+}
+
+.section-icon svg {
+  width: 9pt;
+  height: 9pt;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .side-section-body {

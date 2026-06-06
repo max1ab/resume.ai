@@ -42,6 +42,36 @@
     return `<div class="project-tags">${tags.map(renderTag).join('')}</div>`;
   }
 
+  // ── Icon set ─────────────────────────────────────────────────
+  function iconPath(name) {
+    const paths = {
+      user: '<circle cx="12" cy="8" r="3.2" /><path d="M5.5 19c.9-3.8 4-6 6.5-6s5.6 2.2 6.5 6" />',
+      contact: '<path d="M4 7.5h16v10H4z" /><path d="m4 8 8 5.5L20 8" />',
+      skills: '<path d="M12 3l2.4 5 5.4.8-3.9 3.8.9 5.4-4.8-2.6L7.2 18l.9-5.4-3.9-3.8 5.4-.8z" />',
+      education: '<path d="M3 8.5 12 4l9 4.5-9 4.5z" /><path d="M6.5 11v4.2c1.7 1.2 3.5 1.8 5.5 1.8s3.8-.6 5.5-1.8V11" />',
+      info: '<path d="M7 4.5h9.5A1.5 1.5 0 0 1 18 6v12.5H7A2.5 2.5 0 0 1 4.5 16V7A2.5 2.5 0 0 1 7 4.5z" /><path d="M7 4.5v12" /><path d="M9.5 8h5" /><path d="M9.5 11h4" />',
+      briefcase: '<path d="M8 7V5.8C8 4.8 8.8 4 9.8 4h4.4c1 0 1.8.8 1.8 1.8V7" /><path d="M4 7h16v11H4z" /><path d="M4 11h16" />',
+      award: '<circle cx="12" cy="8" r="4" /><path d="m9.5 11.5-1.2 7 3.7-2 3.7 2-1.2-7" />'
+    };
+    return paths[name] || paths.info;
+  }
+
+  function inferSideIcon(title) {
+    const text = String(title || '');
+    if (/补充|其他|说明|备注/i.test(text)) return 'info';
+    if (/联系|电话|邮箱|网站|github/i.test(text)) return 'contact';
+    if (/技能|能力|技术/i.test(text)) return 'skills';
+    if (/教育|学校|学历/i.test(text)) return 'education';
+    if (/经历|工作|项目/i.test(text)) return 'briefcase';
+    if (/奖|证书|荣誉/i.test(text)) return 'award';
+    if (/基本|信息|个人/i.test(text)) return 'user';
+    return 'info';
+  }
+
+  function renderIcon(name) {
+    return `<span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">${iconPath(name)}</svg></span>`;
+  }
+
   // ── Sidebar renderers ────────────────────────────────────────
   function renderPhoto(photo) {
     if (photo) {
@@ -78,11 +108,12 @@
 
   function renderSideSection(section) {
     const title = escapeHTML(section.title || '');
+    const icon = renderIcon(section.icon || inferSideIcon(section.title));
     const lines = Array.isArray(section.lines) ? section.lines : [];
     const body  = lines.map(renderSideLine).join('<br>');
     return `
 <hr class="side-rule" />
-<div class="side-section-title">${title}</div>
+<div class="side-section-title">${icon}<span>${title}</span></div>
 <div class="side-section-body">${body}</div>`;
   }
 
@@ -244,9 +275,68 @@
       serif: '"Songti SC", "STSong", "SimSun", serif',
       compact: 'Arial, "Helvetica Neue", "Microsoft YaHei", sans-serif'
     };
+    const colorPresets = {
+      neutral: {
+        sidebg: '#F3F3F1',
+        linegray: '#D8D8D5',
+        textgray: '#3F3F3F',
+        muted: '#727272',
+        tagbg: '#E9E9E7',
+        accent: '#000000'
+      },
+      'classic-blue': {
+        sidebg: '#F4F8FE',
+        linegray: '#D5E3F5',
+        textgray: '#333333',
+        muted: '#6F7782',
+        tagbg: '#E8F1FC',
+        accent: '#1268C4'
+      },
+      'academic-red': {
+        sidebg: '#FCF5F5',
+        linegray: '#E9D4D4',
+        textgray: '#333333',
+        muted: '#756C6C',
+        tagbg: '#F8E8E8',
+        accent: '#B21D24'
+      },
+      'business-green': {
+        sidebg: '#F3FAF7',
+        linegray: '#D4E6DE',
+        textgray: '#333333',
+        muted: '#6B7772',
+        tagbg: '#E5F3ED',
+        accent: '#087B63'
+      },
+      'creative-orange': {
+        sidebg: '#FFF7F1',
+        linegray: '#EFD9C8',
+        textgray: '#333333',
+        muted: '#766F6A',
+        tagbg: '#FCEBDD',
+        accent: '#F05A1A'
+      }
+    };
+    const colorKeys = ['sidebg', 'linegray', 'textgray', 'muted', 'tagbg', 'accent'];
+    const hexColorPattern = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+
     const selectedFont = theme && theme.font ? theme.font : 'modern';
     const fontStack = fontPresets[selectedFont] || fontPresets.modern;
     document.documentElement.style.setProperty('--font-stack', fontStack);
+
+    const selectedColor = theme && theme.color ? theme.color : 'neutral';
+    const colors = { ...(colorPresets[selectedColor] || colorPresets.neutral) };
+    if (theme && theme.colors && typeof theme.colors === 'object') {
+      colorKeys.forEach(key => {
+        const value = theme.colors[key];
+        if (typeof value === 'string' && hexColorPattern.test(value.trim())) {
+          colors[key] = value.trim();
+        }
+      });
+    }
+    colorKeys.forEach(key => {
+      document.documentElement.style.setProperty(`--${key}`, colors[key]);
+    });
   }
 
   // ── Screen preview zoom ──────────────────────────────────────
