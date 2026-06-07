@@ -27,8 +27,8 @@
         },
         "headingStyle": {
           "type": "string",
-          "enum": ["underline", "bar"],
-          "description": "右栏标题样式：bar 黑底白字标题加灰色延展条，underline 主题色文字加短横线；省略时默认 bar"
+          "enum": ["underline", "bar", "marker"],
+          "description": "右栏标题样式：bar 色块标题加灰色延展条，marker 左侧主题色竖条标题，underline 主题色文字加短横线；双栏默认 bar，单栏默认 marker"
         },
         "color": {
           "type": "string",

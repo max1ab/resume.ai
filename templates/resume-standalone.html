@@ -320,6 +320,13 @@ a:hover {
   margin-top: 0;
 }
 
+.heading-underline .main-section:not(.first),
+.heading-marker .main-section:not(.first) {
+  border-top: 0.4pt solid var(--linegray);
+  margin-top: var(--item-sep);
+  padding-top: 13pt;
+}
+
 .item-divider + .main-section {
   margin-top: 0;
 }
@@ -348,9 +355,9 @@ a:hover {
   margin-bottom: 10pt;
 }
 
-.layout-single.heading-bar .main-section {
+.heading-marker .main-section {
   display: block;
-  margin-bottom: 8pt;
+  margin-bottom: 12pt;
 }
 
 .heading-bar .main-section-title {
@@ -367,7 +374,7 @@ a:hover {
   text-shadow: none;
 }
 
-.layout-single.heading-bar .main-section-title {
+.heading-marker .main-section-title {
   color: var(--accent);
   background: transparent;
   padding: 0 0 0 9pt;
@@ -385,7 +392,7 @@ a:hover {
   margin: 0;
 }
 
-.layout-single.heading-bar .main-section-rule {
+.heading-marker .main-section-rule {
   display: none;
 }
 
@@ -488,6 +495,15 @@ a:hover {
   border: none;
   border-top: 0.4pt solid var(--linegray);
   margin: var(--item-sep) 0 13pt;
+}
+
+.heading-marker .item-divider {
+  display: none;
+}
+
+.heading-marker .item-divider + .project-item,
+.heading-marker .item-divider + .dated-item {
+  margin-top: 12pt;
 }
 
 /* ── Inline tag chip ────────────────────────────────────────── */
@@ -1153,15 +1169,18 @@ a:hover {
 
   // ── Root render ──────────────────────────────────────────────
   function renderResume(data) {
-    const headingStyle = data.theme && data.theme.headingStyle === 'underline'
-      ? ' heading-underline'
-      : ' heading-bar';
-    if (data.theme && data.theme.layout === 'single') {
+    const theme = data.theme || {};
+    const isSingle = theme.layout === 'single';
+    const heading = ['underline', 'bar', 'marker'].includes(theme.headingStyle)
+      ? theme.headingStyle
+      : (isSingle ? 'marker' : 'bar');
+    const headingStyle = ` heading-${heading}`;
+    if (isSingle) {
       return renderSingleResume(data, headingStyle);
     }
     const sidebar = renderSidebar(data);
     const main    = renderMain(data);
-    const layout = data.theme && data.theme.layout === 'sidebar-right'
+    const layout = theme.layout === 'sidebar-right'
       ? ' layout-sidebar-right'
       : '';
     return `<div class="preview-shell"><div class="resume-page${layout}${headingStyle}">${sidebar}${main}<div class="a4-limit-line" aria-hidden="true"><span>A4</span></div></div></div>`;

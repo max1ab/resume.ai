@@ -314,15 +314,18 @@
 
   // ── Root render ──────────────────────────────────────────────
   function renderResume(data) {
-    const headingStyle = data.theme && data.theme.headingStyle === 'underline'
-      ? ' heading-underline'
-      : ' heading-bar';
-    if (data.theme && data.theme.layout === 'single') {
+    const theme = data.theme || {};
+    const isSingle = theme.layout === 'single';
+    const heading = ['underline', 'bar', 'marker'].includes(theme.headingStyle)
+      ? theme.headingStyle
+      : (isSingle ? 'marker' : 'bar');
+    const headingStyle = ` heading-${heading}`;
+    if (isSingle) {
       return renderSingleResume(data, headingStyle);
     }
     const sidebar = renderSidebar(data);
     const main    = renderMain(data);
-    const layout = data.theme && data.theme.layout === 'sidebar-right'
+    const layout = theme.layout === 'sidebar-right'
       ? ' layout-sidebar-right'
       : '';
     return `<div class="preview-shell"><div class="resume-page${layout}${headingStyle}">${sidebar}${main}<div class="a4-limit-line" aria-hidden="true"><span>A4</span></div></div></div>`;
