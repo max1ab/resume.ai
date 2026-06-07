@@ -57,9 +57,9 @@ function build() {
     // Parse once; validate and use the same object throughout
     const parsed      = JSON.parse(data);
 
-    // Resolve photo path relative to the output HTML file so <img src> works
-    // when the HTML is opened directly from the resumes/ directory.
-    const resolvedData = resolvePhotoPaths(parsed, jsonPath);
+    // Resolve local image paths relative to the output HTML file so <img src>
+    // works when the HTML is opened directly from the resumes/ directory.
+    const resolvedData = resolveImagePaths(parsed, jsonPath);
     const embeddedData = JSON.stringify(resolvedData, null, 2)
       .replace(/</g, '\\u003c')
       .replace(/>/g, '\\u003e')
@@ -103,32 +103,47 @@ function buildStandaloneTemplate() {
 }
 
 /**
- * Make photo path relative to the output HTML file location.
+ * Make local image paths relative to the output HTML file location.
  * JSON may contain paths like "resumes/photo.jpg" (relative to root)
- * or just "photo.jpg" (relative to the JSON file).
- * The HTML is always written next to the JSON, so the same directory
- * is used for both resolution and the final relative path.
+ * or just "photo.jpg" (relative to the JSON file). Remote URLs and missing
+ * files are left untouched.
  */
-function resolvePhotoPaths(data, srcJsonPath) {
-  if (!data.photo) return data;
-
+function resolveImagePaths(data, srcJsonPath) {
   const dir = path.dirname(srcJsonPath);
 
-  // Resolve from root first, then fall back to relative-to-json
-  const fromRoot = path.resolve(ROOT, data.photo);
-  const fromJson = path.resolve(dir, data.photo);
+  function resolveLocalImagePath(imagePath) {
+    if (!imagePath || typeof imagePath !== 'string') return imagePath;
+    if (/^(?:https?:|data:|mailto:)/i.test(imagePath)) return imagePath;
 
-  let absPhoto;
-  if (fs.existsSync(fromRoot)) {
-    absPhoto = fromRoot;
-  } else if (fs.existsSync(fromJson)) {
-    absPhoto = fromJson;
-  } else {
-    // Keep original path as-is (may be a URL or placeholder)
-    return data;
+    const fromRoot = path.resolve(ROOT, imagePath);
+    const fromJson = path.resolve(dir, imagePath);
+    const absPath = fs.existsSync(fromRoot)
+      ? fromRoot
+      : fs.existsSync(fromJson)
+        ? fromJson
+        : null;
+
+    return absPath ? path.relative(dir, absPath) : imagePath;
   }
 
-  return { ...data, photo: path.relative(dir, absPhoto) };
+  const next = {
+    ...data,
+    photo: resolveLocalImagePath(data.photo)
+  };
+
+  if (Array.isArray(data.mainSections)) {
+    next.mainSections = data.mainSections.map(section => {
+      if (!Array.isArray(section.items)) return section;
+      return {
+        ...section,
+        items: section.items.map(item => item && typeof item === 'object'
+          ? { ...item, image: resolveLocalImagePath(item.image) }
+          : item)
+      };
+    });
+  }
+
+  return next;
 }
 
 // ── Build once ───────────────────────────────────────────────
