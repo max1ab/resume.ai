@@ -70,6 +70,11 @@ a:hover {
   grid-template-columns: 75% 25%;
 }
 
+.resume-page.layout-single {
+  display: block;
+  padding: 1.2cm 1cm;
+}
+
 /* ── Sidebar ────────────────────────────────────────────────── */
 .sidebar {
   background: var(--sidebg);
@@ -209,6 +214,103 @@ a:hover {
   padding: 1.2cm 0.7cm 1.2cm 1.1cm;
 }
 
+.layout-single .main {
+  padding: 0;
+  background: transparent;
+}
+
+/* ── Single-column header ─────────────────────────────────── */
+.single-header {
+  padding-bottom: 12pt;
+  border-bottom: 2pt solid var(--accent);
+  margin-bottom: 18pt;
+}
+
+.single-header-main {
+  display: flex;
+  gap: 12mm;
+  align-items: flex-start;
+}
+
+.single-profile {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.single-header .photo-area {
+  flex: 0 0 auto;
+  width: 25mm;
+  height: 35mm;
+  margin: 0;
+}
+
+.single-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14pt;
+  margin-bottom: 10pt;
+}
+
+.single-name {
+  font-size: 28pt;
+  font-weight: 900;
+  color: var(--textgray);
+  line-height: 1.1;
+}
+
+.single-role {
+  font-size: var(--font-large);
+  font-weight: 800;
+  color: var(--accent);
+  border-left: 1pt solid var(--linegray);
+  padding-left: 14pt;
+}
+
+.single-tagline {
+  max-width: 132mm;
+  font-size: var(--font-small);
+  line-height: 1.7;
+  color: var(--textgray);
+  margin-bottom: 12pt;
+}
+
+.single-info {
+  display: flex;
+  flex-direction: column;
+  gap: 7pt;
+  font-size: var(--font-small);
+  color: var(--textgray);
+}
+
+.single-contact {
+  margin-top: 10pt;
+}
+
+.single-info-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5pt 10pt;
+  align-items: center;
+}
+
+.single-contact-group {
+  width: 100%;
+}
+
+.single-info-title {
+  font-weight: 800;
+  color: var(--textgray);
+}
+
+.single-info-item + .single-info-item {
+  border-left: 0.8pt solid var(--linegray);
+  padding-left: 10pt;
+}
+
+.single-info a {
+  color: var(--textgray);
+}
+
 /* Main section heading with short underline */
 .main-section {
   margin-top: calc(var(--item-sep) + var(--section-sep));
@@ -246,6 +348,11 @@ a:hover {
   margin-bottom: 10pt;
 }
 
+.layout-single.heading-bar .main-section {
+  display: block;
+  margin-bottom: 8pt;
+}
+
 .heading-bar .main-section-title {
   display: inline-flex;
   align-items: center;
@@ -260,6 +367,14 @@ a:hover {
   text-shadow: none;
 }
 
+.layout-single.heading-bar .main-section-title {
+  color: var(--accent);
+  background: transparent;
+  padding: 0 0 0 9pt;
+  min-height: 0;
+  border-left: 3pt solid var(--accent);
+}
+
 .heading-bar .main-section-rule {
   display: block;
   flex: 1 1 auto;
@@ -268,6 +383,10 @@ a:hover {
   min-height: 18pt;
   background: var(--tagbg);
   margin: 0;
+}
+
+.layout-single.heading-bar .main-section-rule {
+  display: none;
 }
 
 /* Section divider in main column */
@@ -1113,16 +1232,72 @@ a:hover {
     return `<main class="main">${sections}</main>`;
   }
 
+  function renderSingleInfoLine(line) {
+    if (line && typeof line === 'object' && line.url) {
+      return renderLink(line.url, line.text);
+    }
+    return escapeHTML(String(line)).replace(/\\n|\n/g, ' ');
+  }
+
+  function renderSingleInfoSection(section) {
+    const title = escapeHTML(section.title || '');
+    const lines = Array.isArray(section.lines) ? section.lines : [];
+    if (lines.length === 0) return '';
+    const contactClass = /联系|电话|邮箱|网站|github/i.test(String(section.title || ''))
+      ? ' single-contact-group'
+      : '';
+    return `<div class="single-info-group${contactClass}">
+      <span class="single-info-title">${title}</span>
+      ${lines.map(line => `<span class="single-info-item">${renderSingleInfoLine(line)}</span>`).join('')}
+    </div>`;
+  }
+
+  function renderSingleHeader(data) {
+    const profile = data.profile || {};
+    const name = escapeHTML(profile.name || '');
+    const role = escapeHTML(profile.role || '');
+    const tagline = escapeHTML(profile.tagline || '');
+    const sideSections = Array.isArray(data.sideSections) ? data.sideSections : [];
+    const contactSections = sideSections.filter(s => /联系|电话|邮箱|网站|github/i.test(String(s.title || '')));
+    const otherSections = sideSections.filter(s => !/联系|电话|邮箱|网站|github/i.test(String(s.title || '')));
+    const info = otherSections.map(renderSingleInfoSection).join('');
+    const contactInfo = contactSections.map(renderSingleInfoSection).join('');
+    const photo = renderPhoto(data.photo ?? null);
+    return `<header class="single-header">
+      <div class="single-header-main">
+        <div class="single-profile">
+          <div class="single-title-row">
+            <div class="single-name">${name}</div>
+            ${role ? `<div class="single-role">${role}</div>` : ''}
+          </div>
+          ${tagline ? `<div class="single-tagline">${tagline}</div>` : ''}
+          ${info ? `<div class="single-info">${info}</div>` : ''}
+        </div>
+        ${photo}
+      </div>
+      ${contactInfo ? `<div class="single-contact single-info">${contactInfo}</div>` : ''}
+    </header>`;
+  }
+
+  function renderSingleResume(data, headingStyle) {
+    const header = renderSingleHeader(data);
+    const main = renderMain(data);
+    return `<div class="preview-shell"><div class="resume-page layout-single${headingStyle}">${header}${main}<div class="a4-limit-line" aria-hidden="true"><span>A4</span></div></div></div>`;
+  }
+
   // ── Root render ──────────────────────────────────────────────
   function renderResume(data) {
+    const headingStyle = data.theme && data.theme.headingStyle === 'underline'
+      ? ' heading-underline'
+      : ' heading-bar';
+    if (data.theme && data.theme.layout === 'single') {
+      return renderSingleResume(data, headingStyle);
+    }
     const sidebar = renderSidebar(data);
     const main    = renderMain(data);
     const layout = data.theme && data.theme.layout === 'sidebar-right'
       ? ' layout-sidebar-right'
       : '';
-    const headingStyle = data.theme && data.theme.headingStyle === 'underline'
-      ? ' heading-underline'
-      : ' heading-bar';
     return `<div class="preview-shell"><div class="resume-page${layout}${headingStyle}">${sidebar}${main}<div class="a4-limit-line" aria-hidden="true"><span>A4</span></div></div></div>`;
   }
 
@@ -1254,16 +1429,16 @@ a:hover {
     const page = document.querySelector('.resume-page');
     const sidebar = document.querySelector('.sidebar');
     const main = document.querySelector('.main');
+    const singleHeader = document.querySelector('.single-header');
     const warning = document.getElementById('layout-warning');
     const limitLine = document.querySelector('.a4-limit-line');
-    if (!page || !sidebar || !main || !warning) return;
+    if (limitLine) limitLine.hidden = true;
+    if (!page || !main || !warning) return;
 
     function checkOverflow() {
       const a4Height = page.offsetWidth * 297 / 210;
-      const contentHeight = Math.max(
-        sidebar.offsetTop + sidebar.scrollHeight,
-        main.offsetTop + main.scrollHeight
-      );
+      const contentNodes = [sidebar, singleHeader, main].filter(Boolean);
+      const contentHeight = Math.max(...contentNodes.map(node => node.offsetTop + node.scrollHeight));
       const overflowPx = contentHeight - a4Height;
 
       if (overflowPx > 2) {

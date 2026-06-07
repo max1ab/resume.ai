@@ -134,6 +134,8 @@ neutral / classic-blue / academic-red / business-green / creative-orange
 
 `theme.headingStyle` 默认为 `bar`，可改为 `underline` 使用旧的短横线标题样式。
 
+`theme.layout` 可用 `sidebar-left`、`sidebar-right` 或 `single`。
+
 也可以用 `theme.colors` 覆盖少量颜色 token，值必须是 hex 色值：
 
 ```json

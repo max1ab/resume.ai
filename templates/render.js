@@ -259,16 +259,72 @@
     return `<main class="main">${sections}</main>`;
   }
 
+  function renderSingleInfoLine(line) {
+    if (line && typeof line === 'object' && line.url) {
+      return renderLink(line.url, line.text);
+    }
+    return escapeHTML(String(line)).replace(/\\n|\n/g, ' ');
+  }
+
+  function renderSingleInfoSection(section) {
+    const title = escapeHTML(section.title || '');
+    const lines = Array.isArray(section.lines) ? section.lines : [];
+    if (lines.length === 0) return '';
+    const contactClass = /联系|电话|邮箱|网站|github/i.test(String(section.title || ''))
+      ? ' single-contact-group'
+      : '';
+    return `<div class="single-info-group${contactClass}">
+      <span class="single-info-title">${title}</span>
+      ${lines.map(line => `<span class="single-info-item">${renderSingleInfoLine(line)}</span>`).join('')}
+    </div>`;
+  }
+
+  function renderSingleHeader(data) {
+    const profile = data.profile || {};
+    const name = escapeHTML(profile.name || '');
+    const role = escapeHTML(profile.role || '');
+    const tagline = escapeHTML(profile.tagline || '');
+    const sideSections = Array.isArray(data.sideSections) ? data.sideSections : [];
+    const contactSections = sideSections.filter(s => /联系|电话|邮箱|网站|github/i.test(String(s.title || '')));
+    const otherSections = sideSections.filter(s => !/联系|电话|邮箱|网站|github/i.test(String(s.title || '')));
+    const info = otherSections.map(renderSingleInfoSection).join('');
+    const contactInfo = contactSections.map(renderSingleInfoSection).join('');
+    const photo = renderPhoto(data.photo ?? null);
+    return `<header class="single-header">
+      <div class="single-header-main">
+        <div class="single-profile">
+          <div class="single-title-row">
+            <div class="single-name">${name}</div>
+            ${role ? `<div class="single-role">${role}</div>` : ''}
+          </div>
+          ${tagline ? `<div class="single-tagline">${tagline}</div>` : ''}
+          ${info ? `<div class="single-info">${info}</div>` : ''}
+        </div>
+        ${photo}
+      </div>
+      ${contactInfo ? `<div class="single-contact single-info">${contactInfo}</div>` : ''}
+    </header>`;
+  }
+
+  function renderSingleResume(data, headingStyle) {
+    const header = renderSingleHeader(data);
+    const main = renderMain(data);
+    return `<div class="preview-shell"><div class="resume-page layout-single${headingStyle}">${header}${main}<div class="a4-limit-line" aria-hidden="true"><span>A4</span></div></div></div>`;
+  }
+
   // ── Root render ──────────────────────────────────────────────
   function renderResume(data) {
+    const headingStyle = data.theme && data.theme.headingStyle === 'underline'
+      ? ' heading-underline'
+      : ' heading-bar';
+    if (data.theme && data.theme.layout === 'single') {
+      return renderSingleResume(data, headingStyle);
+    }
     const sidebar = renderSidebar(data);
     const main    = renderMain(data);
     const layout = data.theme && data.theme.layout === 'sidebar-right'
       ? ' layout-sidebar-right'
       : '';
-    const headingStyle = data.theme && data.theme.headingStyle === 'underline'
-      ? ' heading-underline'
-      : ' heading-bar';
     return `<div class="preview-shell"><div class="resume-page${layout}${headingStyle}">${sidebar}${main}<div class="a4-limit-line" aria-hidden="true"><span>A4</span></div></div></div>`;
   }
 
@@ -400,16 +456,16 @@
     const page = document.querySelector('.resume-page');
     const sidebar = document.querySelector('.sidebar');
     const main = document.querySelector('.main');
+    const singleHeader = document.querySelector('.single-header');
     const warning = document.getElementById('layout-warning');
     const limitLine = document.querySelector('.a4-limit-line');
-    if (!page || !sidebar || !main || !warning) return;
+    if (limitLine) limitLine.hidden = true;
+    if (!page || !main || !warning) return;
 
     function checkOverflow() {
       const a4Height = page.offsetWidth * 297 / 210;
-      const contentHeight = Math.max(
-        sidebar.offsetTop + sidebar.scrollHeight,
-        main.offsetTop + main.scrollHeight
-      );
+      const contentNodes = [sidebar, singleHeader, main].filter(Boolean);
+      const contentHeight = Math.max(...contentNodes.map(node => node.offsetTop + node.scrollHeight));
       const overflowPx = contentHeight - a4Height;
 
       if (overflowPx > 2) {

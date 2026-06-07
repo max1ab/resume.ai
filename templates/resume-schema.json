@@ -22,8 +22,8 @@
         },
         "layout": {
           "type": "string",
-          "enum": ["sidebar-left", "sidebar-right"],
-          "description": "双栏布局方向：sidebar-left 左侧栏，sidebar-right 右侧栏"
+          "enum": ["sidebar-left", "sidebar-right", "single"],
+          "description": "布局方向：sidebar-left 左侧栏，sidebar-right 右侧栏，single 单栏顶部信息区"
         },
         "headingStyle": {
           "type": "string",

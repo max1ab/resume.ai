@@ -63,6 +63,11 @@ a:hover {
   grid-template-columns: 75% 25%;
 }
 
+.resume-page.layout-single {
+  display: block;
+  padding: 1.2cm 1cm;
+}
+
 /* ── Sidebar ────────────────────────────────────────────────── */
 .sidebar {
   background: var(--sidebg);
@@ -202,6 +207,103 @@ a:hover {
   padding: 1.2cm 0.7cm 1.2cm 1.1cm;
 }
 
+.layout-single .main {
+  padding: 0;
+  background: transparent;
+}
+
+/* ── Single-column header ─────────────────────────────────── */
+.single-header {
+  padding-bottom: 12pt;
+  border-bottom: 2pt solid var(--accent);
+  margin-bottom: 18pt;
+}
+
+.single-header-main {
+  display: flex;
+  gap: 12mm;
+  align-items: flex-start;
+}
+
+.single-profile {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.single-header .photo-area {
+  flex: 0 0 auto;
+  width: 25mm;
+  height: 35mm;
+  margin: 0;
+}
+
+.single-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14pt;
+  margin-bottom: 10pt;
+}
+
+.single-name {
+  font-size: 28pt;
+  font-weight: 900;
+  color: var(--textgray);
+  line-height: 1.1;
+}
+
+.single-role {
+  font-size: var(--font-large);
+  font-weight: 800;
+  color: var(--accent);
+  border-left: 1pt solid var(--linegray);
+  padding-left: 14pt;
+}
+
+.single-tagline {
+  max-width: 132mm;
+  font-size: var(--font-small);
+  line-height: 1.7;
+  color: var(--textgray);
+  margin-bottom: 12pt;
+}
+
+.single-info {
+  display: flex;
+  flex-direction: column;
+  gap: 7pt;
+  font-size: var(--font-small);
+  color: var(--textgray);
+}
+
+.single-contact {
+  margin-top: 10pt;
+}
+
+.single-info-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5pt 10pt;
+  align-items: center;
+}
+
+.single-contact-group {
+  width: 100%;
+}
+
+.single-info-title {
+  font-weight: 800;
+  color: var(--textgray);
+}
+
+.single-info-item + .single-info-item {
+  border-left: 0.8pt solid var(--linegray);
+  padding-left: 10pt;
+}
+
+.single-info a {
+  color: var(--textgray);
+}
+
 /* Main section heading with short underline */
 .main-section {
   margin-top: calc(var(--item-sep) + var(--section-sep));
@@ -239,6 +341,11 @@ a:hover {
   margin-bottom: 10pt;
 }
 
+.layout-single.heading-bar .main-section {
+  display: block;
+  margin-bottom: 8pt;
+}
+
 .heading-bar .main-section-title {
   display: inline-flex;
   align-items: center;
@@ -253,6 +360,14 @@ a:hover {
   text-shadow: none;
 }
 
+.layout-single.heading-bar .main-section-title {
+  color: var(--accent);
+  background: transparent;
+  padding: 0 0 0 9pt;
+  min-height: 0;
+  border-left: 3pt solid var(--accent);
+}
+
 .heading-bar .main-section-rule {
   display: block;
   flex: 1 1 auto;
@@ -261,6 +376,10 @@ a:hover {
   min-height: 18pt;
   background: var(--tagbg);
   margin: 0;
+}
+
+.layout-single.heading-bar .main-section-rule {
+  display: none;
 }
 
 /* Section divider in main column */
