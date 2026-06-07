@@ -168,6 +168,17 @@ a:hover {
   stroke-linejoin: round;
 }
 
+.heading-bar .section-icon {
+  width: 3pt;
+  height: 12pt;
+  border-radius: 0;
+  background: var(--accent);
+}
+
+.heading-bar .section-icon svg {
+  display: none;
+}
+
 .side-section-body {
   font-size: var(--font-small);
   line-height: 1.5;
@@ -219,6 +230,37 @@ a:hover {
   background: var(--accent);
   margin-top: 10pt;
   margin-bottom: 8pt;
+}
+
+.heading-bar .main-section {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  margin-bottom: 10pt;
+}
+
+.heading-bar .main-section-title {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  font-size: var(--font-medium);
+  font-weight: 800;
+  color: #ffffff;
+  background: var(--accent);
+  line-height: 1.2;
+  min-height: 18pt;
+  padding: 2pt 8pt;
+  text-shadow: none;
+}
+
+.heading-bar .main-section-rule {
+  display: block;
+  flex: 1 1 auto;
+  width: auto;
+  height: 18pt;
+  min-height: 18pt;
+  background: var(--tagbg);
+  margin: 0;
 }
 
 /* Section divider in main column */
@@ -286,6 +328,10 @@ a:hover {
   margin-top: -10pt;
 }
 
+.heading-bar .project-image img {
+  margin-top: 0;
+}
+
 .project-title {
   display: flex;
   align-items: baseline;
@@ -294,16 +340,6 @@ a:hover {
   font-weight: 700;
   color: var(--textgray);
   margin-bottom: var(--inner-sep);
-}
-
-.project-title::before {
-  content: "";
-  width: 5pt;
-  height: 5pt;
-  flex: 0 0 auto;
-  border-radius: 50%;
-  background: var(--accent);
-  transform: translateY(-0.6pt);
 }
 
 .project-desc {
@@ -342,18 +378,6 @@ a:hover {
 /* ── Dated item (experience / education) ────────────────────── */
 .dated-item {
   position: relative;
-  padding-left: 13pt;
-}
-
-.dated-item::after {
-  content: "";
-  position: absolute;
-  left: 0.8pt;
-  top: 4.4pt;
-  width: 5pt;
-  height: 5pt;
-  border-radius: 50%;
-  background: var(--accent);
 }
 
 .dated-header {

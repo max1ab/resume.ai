@@ -1,5 +1,8 @@
 {
   "photo": "sample-photo.jpg",
+  "theme": {
+    "headingStyle": "bar"
+  },
 
   "profile": {
     "name": "姓名",

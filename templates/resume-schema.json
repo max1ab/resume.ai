@@ -25,6 +25,11 @@
           "enum": ["sidebar-left", "sidebar-right"],
           "description": "双栏布局方向：sidebar-left 左侧栏，sidebar-right 右侧栏"
         },
+        "headingStyle": {
+          "type": "string",
+          "enum": ["underline", "bar"],
+          "description": "右栏标题样式：bar 黑底白字标题加灰色延展条，underline 主题色文字加短横线；省略时默认 bar"
+        },
         "color": {
           "type": "string",
           "enum": ["neutral", "classic-blue", "academic-red", "business-green", "creative-orange"],

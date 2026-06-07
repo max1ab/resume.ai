@@ -42,6 +42,10 @@
     return `<div class="project-tags">${tags.map(renderTag).join('')}</div>`;
   }
 
+  function joinWithItemDividers(items) {
+    return items.filter(Boolean).join('<hr class="item-divider" />');
+  }
+
   // ── Icon set ─────────────────────────────────────────────────
   function iconPath(name) {
     const paths = {
@@ -140,7 +144,7 @@
     const paragraphs = (section.paragraphs || [])
       .map(p => `<p>${escapeHTML(p)}</p>`)
       .join('');
-    return `${heading}<div class="body-text">${paragraphs}</div><hr class="item-divider" />`;
+    return `${heading}<div class="body-text">${paragraphs}</div>`;
   }
 
   // ── projects ─────────────────────────────────────────────────
@@ -177,13 +181,12 @@
     ${tags}
   </div>
   ${rightCol}
-</div>
-<hr class="item-divider" />`;
+</div>`;
   }
 
   function renderProjects(section, isFirst) {
     const heading = renderSectionHeading(section.title || '', isFirst);
-    const items   = (section.items || []).map(renderProjectItem).join('');
+    const items   = joinWithItemDividers((section.items || []).map(renderProjectItem));
     return `${heading}${items}`;
   }
 
@@ -204,13 +207,12 @@
   </div>
   ${summary ? `<div class="dated-summary">${summary}</div>` : ''}
   ${bulletHTML}
-</div>
-<hr class="item-divider" />`;
+</div>`;
   }
 
   function renderExperience(section, isFirst) {
     const heading = renderSectionHeading(section.title || '', isFirst);
-    const items   = (section.items || []).map(renderExperienceItem).join('');
+    const items   = joinWithItemDividers((section.items || []).map(renderExperienceItem));
     return `${heading}${items}`;
   }
 
@@ -264,7 +266,10 @@
     const layout = data.theme && data.theme.layout === 'sidebar-right'
       ? ' layout-sidebar-right'
       : '';
-    return `<div class="preview-shell"><div class="resume-page${layout}">${sidebar}${main}<div class="a4-limit-line" aria-hidden="true"><span>A4</span></div></div></div>`;
+    const headingStyle = data.theme && data.theme.headingStyle === 'underline'
+      ? ' heading-underline'
+      : ' heading-bar';
+    return `<div class="preview-shell"><div class="resume-page${layout}${headingStyle}">${sidebar}${main}<div class="a4-limit-line" aria-hidden="true"><span>A4</span></div></div></div>`;
   }
 
   // ── Theme presets ────────────────────────────────────────────
