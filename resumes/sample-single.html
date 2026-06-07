@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume</title>
+  <style>
+/* ============================================================
+   Resume CSS — mirrors elegant-resume.sty visual design
+   Two-column layout: 19% sidebar / 81% main
+   ============================================================ */
+
+/* ── Variables ─────────────────────────────────────────────── */
+:root {
+  --sidebg:    #F3F3F1;
+  --linegray:  #D8D8D5;
+  --textgray:  #3F3F3F;
+  --muted:     #727272;
+  --tagbg:     #E9E9E7;
+  --accent:    #000000;
+
+  --font-stack: -apple-system, "Helvetica Neue", "Hiragino Sans GB",
+                "PingFang SC", "Microsoft YaHei", sans-serif;
+
+  --section-sep: 8pt;
+  --item-sep:    6pt;
+  --inner-sep:   4pt;
+
+  --font-large:  16pt;
+  --font-medium: 12pt;
+  --font-small:  10pt;
+}
+
+/* ── Reset & Base ───────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  font-family: var(--font-stack);
+  font-size: 10pt;
+  color: var(--textgray);
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ── Page / A4 wrapper ──────────────────────────────────────── */
+.resume-page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 25% 75%;
+  position: relative;
+  background: #ffffff;
+}
+
+.resume-page.layout-sidebar-right {
+  grid-template-columns: 75% 25%;
+}
+
+.resume-page.layout-single {
+  display: block;
+  padding: 1.2cm 1cm;
+}
+
+/* ── Sidebar ────────────────────────────────────────────────── */
+.sidebar {
+  background: var(--sidebg);
+  padding: 1.2cm 8.5mm 1.2cm 8.5mm;
+  min-height: 297mm;
+}
+
+.layout-sidebar-right .sidebar {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+/* Photo area */
+.photo-area {
+  width: 25mm;
+  height: 35mm;
+  margin: 0 auto 16pt;
+}
+
+.photo-area img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.photo-placeholder {
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--linegray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: var(--font-small);
+  background: #ffffff;
+}
+
+/* Profile block (name / role / tagline) */
+.profile-header {
+  padding-top: 18pt;
+}
+
+.profile-name {
+  font-size: var(--font-large);
+  font-weight: 700;
+  color: var(--textgray);
+  line-height: 1.2;
+  margin-bottom: 10pt;
+}
+
+.profile-role {
+  font-size: var(--font-medium);
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 8pt;
+}
+
+.profile-tagline {
+  font-size: var(--font-small);
+  color: var(--textgray);
+  line-height: 1.5;
+}
+
+/* Sidebar section divider */
+.side-rule {
+  border: none;
+  border-top: 0.45pt solid var(--linegray);
+  margin: 10pt 0 10pt;
+}
+
+/* Sidebar section */
+.side-section-title {
+  display: flex;
+  align-items: center;
+  gap: 5pt;
+  font-size: var(--font-medium);
+  font-weight: 700;
+  color: var(--textgray);
+  margin-bottom: var(--inner-sep);
+}
+
+.section-icon {
+  width: 13pt;
+  height: 13pt;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  color: #ffffff;
+  background: var(--accent);
+}
+
+.section-icon svg {
+  width: 9pt;
+  height: 9pt;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.heading-bar .section-icon {
+  width: 3pt;
+  height: 12pt;
+  border-radius: 0;
+  background: var(--accent);
+}
+
+.heading-bar .section-icon svg {
+  display: none;
+}
+
+.side-section-body {
+  font-size: var(--font-small);
+  line-height: 1.5;
+  color: var(--textgray);
+}
+
+.side-section-body a {
+  color: var(--textgray);
+  word-break: break-all;
+}
+
+/* ── Main column ────────────────────────────────────────────── */
+.main {
+  padding: 1.2cm 1.1cm 1.2cm 0.7cm;
+  background: #ffffff;
+}
+
+.layout-sidebar-right .main {
+  grid-column: 1;
+  grid-row: 1;
+  padding: 1.2cm 0.7cm 1.2cm 1.1cm;
+}
+
+.layout-single .main {
+  padding: 0;
+  background: transparent;
+}
+
+/* ── Single-column header ─────────────────────────────────── */
+.single-header {
+  padding-bottom: 12pt;
+  border-bottom: 2pt solid var(--accent);
+  margin-bottom: 18pt;
+}
+
+.single-header-main {
+  display: flex;
+  gap: 12mm;
+  align-items: flex-start;
+}
+
+.single-profile {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.single-header .photo-area {
+  flex: 0 0 auto;
+  width: 25mm;
+  height: 35mm;
+  margin: 0;
+}
+
+.single-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14pt;
+  margin-bottom: 10pt;
+}
+
+.single-name {
+  font-size: 28pt;
+  font-weight: 900;
+  color: var(--textgray);
+  line-height: 1.1;
+}
+
+.single-role {
+  font-size: var(--font-large);
+  font-weight: 800;
+  color: var(--accent);
+  border-left: 1pt solid var(--linegray);
+  padding-left: 14pt;
+}
+
+.single-tagline {
+  max-width: 132mm;
+  font-size: var(--font-small);
+  line-height: 1.7;
+  color: var(--textgray);
+  margin-bottom: 12pt;
+}
+
+.single-info {
+  display: flex;
+  flex-direction: column;
+  gap: 7pt;
+  font-size: var(--font-small);
+  color: var(--textgray);
+}
+
+.single-contact {
+  margin-top: 10pt;
+}
+
+.single-info-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5pt 10pt;
+  align-items: center;
+}
+
+.single-contact-group {
+  width: 100%;
+}
+
+.single-info-title {
+  font-weight: 800;
+  color: var(--textgray);
+}
+
+.single-info-item + .single-info-item {
+  border-left: 0.8pt solid var(--linegray);
+  padding-left: 10pt;
+}
+
+.single-info a {
+  color: var(--textgray);
+}
+
+/* Main section heading with short underline */
+.main-section {
+  margin-top: calc(var(--item-sep) + var(--section-sep));
+}
+
+.main-section.first {
+  margin-top: 0;
+}
+
+.heading-underline .main-section:not(.first),
+.heading-marker .main-section:not(.first) {
+  border-top: 0.4pt solid var(--linegray);
+  margin-top: var(--item-sep);
+  padding-top: 13pt;
+}
+
+.item-divider + .main-section {
+  margin-top: 0;
+}
+
+.main-section-title {
+  font-size: 14pt;
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1.2;
+  text-shadow: 0.25pt 0 0 currentColor;
+}
+
+.main-section-rule {
+  display: block;
+  width: 0.34cm;
+  height: 1.8pt;
+  background: var(--accent);
+  margin-top: 10pt;
+  margin-bottom: 8pt;
+}
+
+.heading-bar .main-section {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  margin-bottom: 10pt;
+}
+
+.heading-marker .main-section {
+  display: block;
+  margin-bottom: 12pt;
+}
+
+.heading-bar .main-section-title {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  font-size: var(--font-medium);
+  font-weight: 800;
+  color: #ffffff;
+  background: var(--accent);
+  line-height: 1.2;
+  min-height: 18pt;
+  padding: 2pt 8pt;
+  text-shadow: none;
+}
+
+.heading-marker .main-section-title {
+  color: var(--accent);
+  background: transparent;
+  padding: 0 0 0 9pt;
+  min-height: 0;
+  border-left: 3pt solid var(--accent);
+}
+
+.heading-bar .main-section-rule {
+  display: block;
+  flex: 1 1 auto;
+  width: auto;
+  height: 18pt;
+  min-height: 18pt;
+  background: var(--tagbg);
+  margin: 0;
+}
+
+.heading-marker .main-section-rule {
+  display: none;
+}
+
+/* Section divider in main column */
+.main-divider {
+  border: none;
+  border-top: 0.55pt solid var(--linegray);
+  margin: var(--item-sep) 0 var(--inner-sep);
+}
+
+/* ── Body text ──────────────────────────────────────────────── */
+.body-text {
+  font-size: var(--font-small);
+  line-height: 1.5;
+  color: var(--textgray);
+}
+
+.body-text p + p {
+  margin-top: 6pt;
+}
+
+/* ── Project item ───────────────────────────────────────────── */
+.project-item {
+  display: flex;
+  gap: 1.5%;
+  align-items: flex-start;
+}
+
+.project-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.project-meta {
+  flex: 0 0 20%;
+  font-size: var(--font-small);
+  color: var(--muted);
+  padding-top: 2pt;
+  text-align: right;
+  word-break: break-all;
+}
+
+.project-meta-label {
+  display: block;
+  color: var(--muted);
+  font-size: var(--font-small);
+}
+
+.project-meta-value {
+  display: block;
+  color: var(--textgray);
+  font-size: var(--font-small);
+  margin-top: var(--inner-sep);
+  word-break: break-all;
+}
+
+.project-image {
+  flex: 0 0 20%;
+  padding-top: 0;
+}
+
+.project-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-top: -10pt;
+}
+
+.heading-bar .project-image img {
+  margin-top: 0;
+}
+
+.project-title {
+  display: flex;
+  align-items: baseline;
+  gap: 5pt;
+  font-size: var(--font-medium);
+  font-weight: 700;
+  color: var(--textgray);
+  margin-bottom: var(--inner-sep);
+}
+
+.project-desc {
+  font-size: var(--font-small);
+  line-height: 1.5;
+  color: var(--textgray);
+  margin-bottom: 5pt;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6pt;
+  margin-top: 3pt;
+  margin-bottom: 3pt;
+}
+
+/* Thin separator below each project/experience item */
+.item-divider {
+  border: none;
+  border-top: 0.4pt solid var(--linegray);
+  margin: var(--item-sep) 0 13pt;
+}
+
+.heading-marker .item-divider {
+  display: none;
+}
+
+.heading-marker .item-divider + .project-item,
+.heading-marker .item-divider + .dated-item {
+  margin-top: 12pt;
+}
+
+/* ── Inline tag chip ────────────────────────────────────────── */
+.tag {
+  display: inline-block;
+  padding: 1pt 5pt;
+  border-radius: 3pt;
+  background: var(--tagbg);
+  color: var(--muted);
+  font-size: var(--font-small);
+  line-height: 1.4;
+}
+
+/* ── Dated item (experience / education) ────────────────────── */
+.dated-item {
+  position: relative;
+}
+
+.dated-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8pt;
+}
+
+.dated-title {
+  font-size: var(--font-medium);
+  font-weight: 700;
+  color: var(--textgray);
+}
+
+.dated-date {
+  font-size: var(--font-small);
+  color: var(--muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.dated-summary {
+  font-size: var(--font-small);
+  line-height: 1.5;
+  color: var(--textgray);
+  margin-top: var(--item-sep);
+}
+
+.dated-bullets {
+  margin-top: 5pt;
+  padding-left: 1.15em;
+  list-style: disc;
+}
+
+.dated-bullets li {
+  font-size: var(--font-small);
+  line-height: 1.5;
+  color: var(--textgray);
+  margin-bottom: 2pt;
+}
+
+/* ── Method item (4-col strength grid) ─────────────────────── */
+.methods-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8pt;
+}
+
+.method-item {
+  /* no extra padding needed */
+}
+
+.method-number {
+  font-size: var(--font-large);
+  font-weight: 700;
+  color: var(--textgray);
+  line-height: 1.1;
+}
+
+.method-label {
+  font-size: var(--font-medium);
+  font-weight: 700;
+  color: var(--textgray);
+  margin-top: var(--inner-sep);
+  margin-bottom: 5pt;
+}
+
+.method-text {
+  font-size: var(--font-small);
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.render-warning {
+  margin: 8pt 0;
+  padding: 6pt 8pt;
+  border: 1px solid #b91c1c;
+  color: #b91c1c;
+  font-size: var(--font-small);
+  font-family: var(--font-stack);
+}
+
+/* ── Print styles ───────────────────────────────────────────── */
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  html, body {
+    background: #ffffff;
+  }
+
+  .preview-toolbar,
+  .print-hint {
+    display: none;
+  }
+
+  .preview-shell {
+    width: auto !important;
+    height: auto !important;
+  }
+
+  .resume-page {
+    position: static;
+    transform: none;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0;
+    box-shadow: none;
+  }
+
+  .sidebar {
+    min-height: 0;
+    /* preserve sidebar background color when printing */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .item-divider,
+  .main-divider,
+  .side-rule {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .tag {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .render-warning {
+    display: none;
+  }
+
+  .layout-warning {
+    display: none;
+  }
+
+  .a4-limit-line {
+    display: none;
+  }
+}
+
+/* ── Screen-only shadow (preview comfort) ──────────────────── */
+@media screen {
+  html {
+    background: #e8e8e8;
+  }
+
+  body {
+    background: #e8e8e8;
+    padding: 56px 20px 40px;
+  }
+
+  #app {
+    display: flex;
+    justify-content: center;
+  }
+
+  .preview-toolbar {
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 6px;
+    background: rgba(255,255,255,0.94);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    transform: translateX(-50%);
+  }
+
+  .preview-toolbar button {
+    min-width: 30px;
+    height: 28px;
+    padding: 0 10px;
+    border: 1px solid var(--linegray);
+    border-radius: 4px;
+    background: #ffffff;
+    color: var(--textgray);
+    font: 600 12px var(--font-stack);
+    cursor: pointer;
+  }
+
+  .preview-toolbar button:hover {
+    background: #f6f6f5;
+  }
+
+  .preview-toolbar button[data-print] {
+    color: #ffffff;
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  .preview-toolbar button[data-print]:hover {
+    background: var(--textgray);
+  }
+
+  .print-hint {
+    position: fixed;
+    top: 58px;
+    left: 50%;
+    z-index: 10;
+    display: grid;
+    gap: 2px;
+    min-width: 260px;
+    padding: 8px 10px;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 6px;
+    background: rgba(255,255,255,0.96);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    color: var(--textgray);
+    font: 12px var(--font-stack);
+    transform: translateX(-50%);
+  }
+
+  .print-hint strong {
+    font-size: 12px;
+  }
+
+  .print-hint span {
+    color: var(--muted);
+  }
+
+  .print-hint button {
+    justify-self: end;
+    height: 26px;
+    margin-top: 4px;
+    padding: 0 10px;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    background: var(--accent);
+    color: #ffffff;
+    font: 600 12px var(--font-stack);
+    cursor: pointer;
+  }
+
+  .print-hint button:hover {
+    background: var(--textgray);
+  }
+
+  .print-hint[hidden] {
+    display: none;
+  }
+
+  #zoom-label {
+    min-width: 44px;
+    text-align: center;
+    color: var(--muted);
+    font: 600 12px var(--font-stack);
+  }
+
+  .layout-warning {
+    padding: 0 8px;
+    border-left: 1px solid var(--linegray);
+    color: #b91c1c;
+    font: 600 12px var(--font-stack);
+    white-space: nowrap;
+  }
+
+  .layout-warning[hidden] {
+    display: none;
+  }
+
+  .preview-shell {
+    --preview-scale: 1;
+    position: relative;
+    flex: 0 0 auto;
+  }
+
+  .resume-page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transform: scale(var(--preview-scale));
+    transform-origin: top left;
+  }
+
+  .a4-limit-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 297mm;
+    z-index: 3;
+    border-top: 1px dashed #b91c1c;
+    color: #b91c1c;
+    pointer-events: none;
+  }
+
+  .a4-limit-line[hidden] {
+    display: none;
+  }
+
+  .a4-limit-line span {
+    position: absolute;
+    top: -9px;
+    right: 6px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: #fff5f5;
+    font: 600 9px var(--font-stack);
+  }
+}
+
+</style>
+</head>
+<body>
+  <div class="preview-toolbar" aria-label="简历预览工具栏">
+    <button type="button" data-print title="导出 PDF">导出 PDF</button>
+    <button type="button" data-zoom="out" title="缩小">−</button>
+    <button type="button" data-zoom="fit" title="适应宽度">适应宽度</button>
+    <span id="zoom-label">100%</span>
+    <button type="button" data-zoom="in" title="放大">+</button>
+    <span id="layout-warning" class="layout-warning" hidden></span>
+  </div>
+  <div id="print-hint" class="print-hint" hidden>
+    <strong>保存 PDF 设置</strong>
+    <span>纸张 A4 · 边距无 · 背景图形开启 · 页眉页脚关闭</span>
+    <button type="button" data-print-confirm>继续打开打印</button>
+  </div>
+  <div id="app"></div>
+  <script type="application/json" id="resume-data">{
+  "photo": "sample-photo.jpg",
+  "theme": {
+    "headingStyle": "underline",
+    "layout": "single",
+    "color": "classic-blue"
+  },
+  "profile": {
+    "name": "姓名",
+    "role": "目标岗位",
+    "tagline": "这里写 2 行个人简介。"
+  },
+  "sideSections": [
+    {
+      "title": "基本信息",
+      "lines": [
+        "城市 · 学历",
+        "年龄 / 年级 / 状态",
+        "语言或证书",
+        "常用 ID: username"
+      ]
+    },
+    {
+      "title": "联系方式",
+      "lines": [
+        {
+          "text": "yourname@email.com",
+          "url": "mailto:yourname@email.com"
+        },
+        "Phone: 12345678900",
+        {
+          "text": "github.com/yourname",
+          "url": "https://github.com/yourname"
+        },
+        {
+          "text": "your-website.com",
+          "url": "https://your-website.com"
+        }
+      ]
+    },
+    {
+      "title": "核心技能",
+      "lines": [
+        "技能 A / 技能 B",
+        "技能 C / 技能 D",
+        "工具 A / 工具 B"
+      ]
+    }
+  ],
+  "mainSections": [
+    {
+      "title": "关于我",
+      "type": "body",
+      "paragraphs": [
+        "这里写纯文本段落。适合放个人介绍、职业方向、能力概述。段落之间可以用空行或手动加一点间距。",
+        "第二段可以补充你解决问题的方法、项目偏好、沟通风格或长期目标。"
+      ]
+    },
+    {
+      "title": "代表项目",
+      "type": "projects",
+      "items": [
+        {
+          "title": "项目名称",
+          "description": "这里写项目描述。建议说明项目目标、你的职责、核心技术、结果或影响。",
+          "tags": [
+            "标签一",
+            "标签二",
+            "标签三"
+          ],
+          "metaLabel": "备注",
+          "metaValue": "https://example.com"
+        },
+        {
+          "title": "另一个项目",
+          "description": "适合展示可视化作品、界面截图、数据看板、设计稿或其他需要图片辅助说明的成果。",
+          "tags": [
+            "工具",
+            "方向"
+          ],
+          "image": "sample-project.svg"
+        }
+      ]
+    },
+    {
+      "title": "经历",
+      "type": "experience",
+      "items": [
+        {
+          "title": "公司或角色名称",
+          "date": "2024.01 — 至今",
+          "summary": "这里写一行经历摘要。右侧适合放时间，正文适合放职责范围。",
+          "bullets": [
+            "写具体行动和结果。",
+            "写你负责的模块、流程或产出。",
+            "写可量化影响或可验证成果。"
+          ]
+        },
+        {
+          "title": "另一段经历",
+          "date": "2022.01 — 2023.12",
+          "summary": "这里写经历摘要。",
+          "bullets": [
+            "要点一。",
+            "要点二。"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "教育背景",
+      "type": "experience",
+      "items": [
+        {
+          "title": "学校名称 / 专业名称",
+          "date": "开始时间 — 结束时间",
+          "summary": "学历：本科（或硕士）",
+          "bullets": [
+            "GPA、主修课程、奖项荣誉或相关课程项目可放在这里。"
+          ]
+        }
+      ]
+    }
+  ]
+}</script>
+  <script>
+(function () {
+  'use strict';
+
+  // ── Security helpers ─────────────────────────────────────────
+  function escapeHTML(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  // Only allow safe link schemes to prevent javascript: injection
+  function safeHref(url) {
+    if (typeof url !== 'string') return null;
+    const trimmed = url.trim();
+    if (
+      trimmed.startsWith('http://') ||
+      trimmed.startsWith('https://') ||
+      trimmed.startsWith('mailto:')
+    ) {
+      return escapeHTML(trimmed);
+    }
+    return null;
+  }
+
+  function renderLink(url, label) {
+    const href = safeHref(url);
+    if (!href) return escapeHTML(label || url);
+    return `<a href="${href}" target="_blank" rel="noopener noreferrer">${escapeHTML(label || url)}</a>`;
+  }
+
+  // ── Tag chip ─────────────────────────────────────────────────
+  function renderTag(text) {
+    return `<span class="tag">${escapeHTML(text)}</span>`;
+  }
+
+  function renderTags(tags) {
+    if (!Array.isArray(tags) || tags.length === 0) return '';
+    return `<div class="project-tags">${tags.map(renderTag).join('')}</div>`;
+  }
+
+  function joinWithItemDividers(items) {
+    return items.filter(Boolean).join('<hr class="item-divider" />');
+  }
+
+  // ── Icon set ─────────────────────────────────────────────────
+  function iconPath(name) {
+    const paths = {
+      user: '<circle cx="12" cy="8" r="3.2" /><path d="M5.5 19c.9-3.8 4-6 6.5-6s5.6 2.2 6.5 6" />',
+      contact: '<path d="M4 7.5h16v10H4z" /><path d="m4 8 8 5.5L20 8" />',
+      skills: '<path d="M12 3l2.4 5 5.4.8-3.9 3.8.9 5.4-4.8-2.6L7.2 18l.9-5.4-3.9-3.8 5.4-.8z" />',
+      education: '<path d="M3 8.5 12 4l9 4.5-9 4.5z" /><path d="M6.5 11v4.2c1.7 1.2 3.5 1.8 5.5 1.8s3.8-.6 5.5-1.8V11" />',
+      info: '<path d="M7 4.5h9.5A1.5 1.5 0 0 1 18 6v12.5H7A2.5 2.5 0 0 1 4.5 16V7A2.5 2.5 0 0 1 7 4.5z" /><path d="M7 4.5v12" /><path d="M9.5 8h5" /><path d="M9.5 11h4" />',
+      briefcase: '<path d="M8 7V5.8C8 4.8 8.8 4 9.8 4h4.4c1 0 1.8.8 1.8 1.8V7" /><path d="M4 7h16v11H4z" /><path d="M4 11h16" />',
+      award: '<circle cx="12" cy="8" r="4" /><path d="m9.5 11.5-1.2 7 3.7-2 3.7 2-1.2-7" />'
+    };
+    return paths[name] || paths.info;
+  }
+
+  function inferSideIcon(title) {
+    const text = String(title || '');
+    if (/补充|其他|说明|备注/i.test(text)) return 'info';
+    if (/联系|电话|邮箱|网站|github/i.test(text)) return 'contact';
+    if (/技能|能力|技术/i.test(text)) return 'skills';
+    if (/教育|学校|学历/i.test(text)) return 'education';
+    if (/经历|工作|项目/i.test(text)) return 'briefcase';
+    if (/奖|证书|荣誉/i.test(text)) return 'award';
+    if (/基本|信息|个人/i.test(text)) return 'user';
+    return 'info';
+  }
+
+  function renderIcon(name) {
+    return `<span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">${iconPath(name)}</svg></span>`;
+  }
+
+  // ── Sidebar renderers ────────────────────────────────────────
+  function renderPhoto(photo) {
+    if (photo) {
+      const src = escapeHTML(photo);
+      return `<div class="photo-area"><img src="${src}" alt="头像" /></div>`;
+    }
+    return `<div class="photo-area"><div class="photo-placeholder">照片位置</div></div>`;
+  }
+
+  function renderProfile(profile) {
+    if (!profile) return '';
+    const name    = escapeHTML(profile.name    || '');
+    const role    = escapeHTML(profile.role    || '');
+    const tagline = escapeHTML(profile.tagline || '');
+    return `
+<div class="profile-header">
+  <div class="profile-name">${name}</div>
+  <div class="profile-role">${role}</div>
+  ${tagline ? `<div class="profile-tagline">${tagline}</div>` : ''}
+</div>`;
+  }
+
+  // A side section body can contain plain text lines or hyperlink objects:
+  // { text, url } → rendered as <a>text</a>
+  // plain strings may also embed newlines (split into <br>)
+  function renderSideLine(line) {
+    if (line && typeof line === 'object' && line.url) {
+      return renderLink(line.url, line.text);
+    }
+    // Replace both real newline characters and the two-character sequence \n
+    // (which AI-generated JSON may emit as a literal backslash-n).
+    return escapeHTML(String(line)).replace(/\\n|\n/g, '<br>');
+  }
+
+  function renderSideSection(section) {
+    const title = escapeHTML(section.title || '');
+    const icon = renderIcon(section.icon || inferSideIcon(section.title));
+    const lines = Array.isArray(section.lines) ? section.lines : [];
+    const body  = lines.map(renderSideLine).join('<br>');
+    return `
+<hr class="side-rule" />
+<div class="side-section-title">${icon}<span>${title}</span></div>
+<div class="side-section-body">${body}</div>`;
+  }
+
+  function renderSidebar(data) {
+    const photo    = renderPhoto(data.photo ?? null);
+    const profile  = renderProfile(data.profile);
+    const sections = (data.sideSections || []).map(renderSideSection).join('');
+    return `<aside class="sidebar">${photo}${profile}${sections}</aside>`;
+  }
+
+  // ── Main column section heading ──────────────────────────────
+  function renderSectionHeading(title, isFirst) {
+    const firstClass = isFirst ? ' first' : '';
+    return `
+<div class="main-section${firstClass}">
+  <div class="main-section-title">${escapeHTML(title)}</div>
+  <span class="main-section-rule"></span>
+</div>`;
+  }
+
+  // ── body: paragraphs ─────────────────────────────────────────
+  function renderBody(section, isFirst) {
+    const heading    = renderSectionHeading(section.title || '', isFirst);
+    const paragraphs = (section.paragraphs || [])
+      .map(p => `<p>${escapeHTML(p)}</p>`)
+      .join('');
+    return `${heading}<div class="body-text">${paragraphs}</div>`;
+  }
+
+  // ── projects ─────────────────────────────────────────────────
+  function renderProjectItem(item) {
+    const title = escapeHTML(item.title || '');
+    const desc  = escapeHTML(item.description || '');
+    const tags  = renderTags(item.tags);
+
+    let rightCol;
+    if (item.image) {
+      const src = escapeHTML(item.image);
+      rightCol = `<div class="project-image"><img src="${src}" alt="${title}" /></div>`;
+    } else {
+      const label = escapeHTML(item.metaLabel || '');
+      let   value = '';
+      if (item.metaValue) {
+        const href = safeHref(item.metaValue);
+        value = href
+          ? `<a href="${href}" target="_blank" rel="noopener noreferrer">${escapeHTML(item.metaValue)}</a>`
+          : escapeHTML(item.metaValue);
+      }
+      rightCol = `
+<div class="project-meta">
+  ${label ? `<span class="project-meta-label">${label}</span>` : ''}
+  ${value  ? `<span class="project-meta-value">${value}</span>`  : ''}
+</div>`;
+    }
+
+    return `
+<div class="project-item">
+  <div class="project-main">
+    <div class="project-title">${title}</div>
+    <div class="project-desc">${desc}</div>
+    ${tags}
+  </div>
+  ${rightCol}
+</div>`;
+  }
+
+  function renderProjects(section, isFirst) {
+    const heading = renderSectionHeading(section.title || '', isFirst);
+    const items   = joinWithItemDividers((section.items || []).map(renderProjectItem));
+    return `${heading}${items}`;
+  }
+
+  // ── experience ───────────────────────────────────────────────
+  function renderExperienceItem(item) {
+    const title   = escapeHTML(item.title   || '');
+    const date    = escapeHTML(item.date    || '');
+    const summary = escapeHTML(item.summary || '');
+    const bullets = Array.isArray(item.bullets) ? item.bullets : [];
+    const bulletHTML = bullets.length
+      ? `<ul class="dated-bullets">${bullets.map(b => `<li>${escapeHTML(b)}</li>`).join('')}</ul>`
+      : '';
+    return `
+<div class="dated-item">
+  <div class="dated-header">
+    <span class="dated-title">${title}</span>
+    <span class="dated-date">${date}</span>
+  </div>
+  ${summary ? `<div class="dated-summary">${summary}</div>` : ''}
+  ${bulletHTML}
+</div>`;
+  }
+
+  function renderExperience(section, isFirst) {
+    const heading = renderSectionHeading(section.title || '', isFirst);
+    const items   = joinWithItemDividers((section.items || []).map(renderExperienceItem));
+    return `${heading}${items}`;
+  }
+
+  // ── methods (4-col strength grid) ────────────────────────────
+  function renderMethodItem(item) {
+    const num   = escapeHTML(String(item.number || ''));
+    const label = escapeHTML(item.label || '');
+    const text  = escapeHTML(item.text  || '');
+    return `
+<div class="method-item">
+  <div class="method-number">${num}</div>
+  <div class="method-label">${label}</div>
+  <div class="method-text">${text}</div>
+</div>`;
+  }
+
+  function renderMethods(section, isFirst) {
+    const heading = renderSectionHeading(section.title || '', isFirst);
+    const items   = (section.items || []).map(renderMethodItem).join('');
+    return `${heading}<div class="methods-grid">${items}</div>`;
+  }
+
+  // ── Main column dispatcher ───────────────────────────────────
+  function renderMainSection(section, index) {
+    const isFirst = index === 0;
+    switch (section.type) {
+      case 'body':       return renderBody(section, isFirst);
+      case 'projects':   return renderProjects(section, isFirst);
+      case 'experience': return renderExperience(section, isFirst);
+      case 'methods':    return renderMethods(section, isFirst);
+      default:
+        console.warn('[resume] unknown section type:', section.type, section);
+        return `
+<div class="render-warning">
+  未知组件类型：${escapeHTML(section.type || '(empty)')}
+</div>`;
+    }
+  }
+
+  function renderMain(data) {
+    const sections = (data.mainSections || [])
+      .map((s, i) => renderMainSection(s, i))
+      .join('');
+    return `<main class="main">${sections}</main>`;
+  }
+
+  function renderSingleInfoLine(line) {
+    if (line && typeof line === 'object' && line.url) {
+      return renderLink(line.url, line.text);
+    }
+    return escapeHTML(String(line)).replace(/\\n|\n/g, ' ');
+  }
+
+  function renderSingleInfoSection(section) {
+    const title = escapeHTML(section.title || '');
+    const lines = Array.isArray(section.lines) ? section.lines : [];
+    if (lines.length === 0) return '';
+    const contactClass = /联系|电话|邮箱|网站|github/i.test(String(section.title || ''))
+      ? ' single-contact-group'
+      : '';
+    return `<div class="single-info-group${contactClass}">
+      <span class="single-info-title">${title}</span>
+      ${lines.map(line => `<span class="single-info-item">${renderSingleInfoLine(line)}</span>`).join('')}
+    </div>`;
+  }
+
+  function renderSingleHeader(data) {
+    const profile = data.profile || {};
+    const name = escapeHTML(profile.name || '');
+    const role = escapeHTML(profile.role || '');
+    const tagline = escapeHTML(profile.tagline || '');
+    const sideSections = Array.isArray(data.sideSections) ? data.sideSections : [];
+    const contactSections = sideSections.filter(s => /联系|电话|邮箱|网站|github/i.test(String(s.title || '')));
+    const otherSections = sideSections.filter(s => !/联系|电话|邮箱|网站|github/i.test(String(s.title || '')));
+    const info = otherSections.map(renderSingleInfoSection).join('');
+    const contactInfo = contactSections.map(renderSingleInfoSection).join('');
+    const photo = renderPhoto(data.photo ?? null);
+    return `<header class="single-header">
+      <div class="single-header-main">
+        <div class="single-profile">
+          <div class="single-title-row">
+            <div class="single-name">${name}</div>
+            ${role ? `<div class="single-role">${role}</div>` : ''}
+          </div>
+          ${tagline ? `<div class="single-tagline">${tagline}</div>` : ''}
+          ${info ? `<div class="single-info">${info}</div>` : ''}
+        </div>
+        ${photo}
+      </div>
+      ${contactInfo ? `<div class="single-contact single-info">${contactInfo}</div>` : ''}
+    </header>`;
+  }
+
+  function renderSingleResume(data, headingStyle) {
+    const header = renderSingleHeader(data);
+    const main = renderMain(data);
+    return `<div class="preview-shell"><div class="resume-page layout-single${headingStyle}">${header}${main}<div class="a4-limit-line" aria-hidden="true"><span>A4</span></div></div></div>`;
+  }
+
+  // ── Root render ──────────────────────────────────────────────
+  function renderResume(data) {
+    const theme = data.theme || {};
+    const isSingle = theme.layout === 'single';
+    const heading = ['underline', 'bar', 'marker'].includes(theme.headingStyle)
+      ? theme.headingStyle
+      : (isSingle ? 'marker' : 'bar');
+    const headingStyle = ` heading-${heading}`;
+    if (isSingle) {
+      return renderSingleResume(data, headingStyle);
+    }
+    const sidebar = renderSidebar(data);
+    const main    = renderMain(data);
+    const layout = theme.layout === 'sidebar-right'
+      ? ' layout-sidebar-right'
+      : '';
+    return `<div class="preview-shell"><div class="resume-page${layout}${headingStyle}">${sidebar}${main}<div class="a4-limit-line" aria-hidden="true"><span>A4</span></div></div></div>`;
+  }
+
+  // ── Theme presets ────────────────────────────────────────────
+  function applyTheme(theme) {
+    const fontPresets = {
+      system: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      modern: '"Helvetica Neue", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif',
+      serif: '"Songti SC", "STSong", "SimSun", serif',
+      compact: 'Arial, "Helvetica Neue", "Microsoft YaHei", sans-serif'
+    };
+    const colorPresets = {
+      neutral: {
+        sidebg: '#F3F3F1',
+        linegray: '#D8D8D5',
+        textgray: '#3F3F3F',
+        muted: '#727272',
+        tagbg: '#E9E9E7',
+        accent: '#333333'
+      },
+      'classic-blue': {
+        sidebg: '#F4F8FE',
+        linegray: '#D5E3F5',
+        textgray: '#333333',
+        muted: '#6F7782',
+        tagbg: '#E8F1FC',
+        accent: '#1268C4'
+      },
+      'academic-red': {
+        sidebg: '#FCF5F5',
+        linegray: '#E9D4D4',
+        textgray: '#333333',
+        muted: '#756C6C',
+        tagbg: '#F8E8E8',
+        accent: '#B21D24'
+      },
+      'business-green': {
+        sidebg: '#F3FAF7',
+        linegray: '#D4E6DE',
+        textgray: '#333333',
+        muted: '#6B7772',
+        tagbg: '#E5F3ED',
+        accent: '#087B63'
+      },
+      'creative-orange': {
+        sidebg: '#FFF7F1',
+        linegray: '#EFD9C8',
+        textgray: '#333333',
+        muted: '#766F6A',
+        tagbg: '#FCEBDD',
+        accent: '#F05A1A'
+      }
+    };
+    const colorKeys = ['sidebg', 'linegray', 'textgray', 'muted', 'tagbg', 'accent'];
+    const hexColorPattern = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+
+    const selectedFont = theme && theme.font ? theme.font : 'modern';
+    const fontStack = fontPresets[selectedFont] || fontPresets.modern;
+    document.documentElement.style.setProperty('--font-stack', fontStack);
+
+    const selectedColor = theme && theme.color ? theme.color : 'neutral';
+    const colors = { ...(colorPresets[selectedColor] || colorPresets.neutral) };
+    if (theme && theme.colors && typeof theme.colors === 'object') {
+      colorKeys.forEach(key => {
+        const value = theme.colors[key];
+        if (typeof value === 'string' && hexColorPattern.test(value.trim())) {
+          colors[key] = value.trim();
+        }
+      });
+    }
+    colorKeys.forEach(key => {
+      document.documentElement.style.setProperty(`--${key}`, colors[key]);
+    });
+  }
+
+  // ── Screen preview zoom ──────────────────────────────────────
+  function setupPreviewZoom() {
+    const shell = document.querySelector('.preview-shell');
+    const page  = document.querySelector('.resume-page');
+    const label = document.getElementById('zoom-label');
+    if (!shell || !page || !label) return;
+
+    const minScale = 0.45;
+    const maxScale = 1.8;
+    const step     = 0.1;
+    let autoFit    = true;
+    let scale      = 1;
+
+    function clamp(value) {
+      return Math.max(minScale, Math.min(maxScale, value));
+    }
+
+    function applyScale(nextScale) {
+      scale = clamp(nextScale);
+      shell.style.setProperty('--preview-scale', String(scale));
+      shell.style.width  = `${Math.ceil(page.offsetWidth * scale)}px`;
+      shell.style.height = `${Math.ceil(page.offsetHeight * scale)}px`;
+      label.textContent = `${Math.round(scale * 100)}%`;
+    }
+
+    function fitToWidth() {
+      const availableWidth = Math.max(320, window.innerWidth - 40);
+      const baseWidth = page.offsetWidth || 1;
+      applyScale(Math.min(1, availableWidth / baseWidth));
+    }
+
+    document.querySelectorAll('[data-zoom]').forEach(button => {
+      button.addEventListener('click', () => {
+        const action = button.getAttribute('data-zoom');
+        if (action === 'fit') {
+          autoFit = true;
+          fitToWidth();
+          return;
+        }
+        autoFit = false;
+        applyScale(scale + (action === 'in' ? step : -step));
+      });
+    });
+
+    window.addEventListener('resize', () => {
+      if (autoFit) fitToWidth();
+    });
+
+    requestAnimationFrame(fitToWidth);
+  }
+
+  // ── Layout warnings ─────────────────────────────────────────
+  function setupLayoutWarnings() {
+    const page = document.querySelector('.resume-page');
+    const sidebar = document.querySelector('.sidebar');
+    const main = document.querySelector('.main');
+    const singleHeader = document.querySelector('.single-header');
+    const warning = document.getElementById('layout-warning');
+    const limitLine = document.querySelector('.a4-limit-line');
+    if (limitLine) limitLine.hidden = true;
+    if (!page || !main || !warning) return;
+
+    function checkOverflow() {
+      const a4Height = page.offsetWidth * 297 / 210;
+      const contentNodes = [sidebar, singleHeader, main].filter(Boolean);
+      const contentHeight = Math.max(...contentNodes.map(node => node.offsetTop + node.scrollHeight));
+      const overflowPx = contentHeight - a4Height;
+
+      if (overflowPx > 2) {
+        const overflowMm = overflowPx / page.offsetWidth * 210;
+        warning.hidden = false;
+        warning.textContent = `超出 ${Math.ceil(overflowMm)}mm`;
+        warning.title = `内容高度约 ${(contentHeight / page.offsetWidth * 210).toFixed(1)}mm，A4 高度为 297mm。`;
+        if (limitLine) limitLine.hidden = false;
+      } else {
+        warning.hidden = true;
+        warning.textContent = '';
+        warning.removeAttribute('title');
+        if (limitLine) limitLine.hidden = true;
+      }
+    }
+
+    window.addEventListener('resize', checkOverflow);
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(checkOverflow).observe(page);
+    }
+    requestAnimationFrame(checkOverflow);
+    window.addEventListener('load', checkOverflow);
+  }
+
+  // ── Print export ────────────────────────────────────────────
+  function setupPrintExport() {
+    const printButton = document.querySelector('[data-print]');
+    const confirmButton = document.querySelector('[data-print-confirm]');
+    const hint = document.getElementById('print-hint');
+    if (!printButton) return;
+
+    function openPrintDialog() {
+      if (hint) {
+        hint.hidden = true;
+      }
+      window.print();
+    }
+
+    printButton.addEventListener('click', () => {
+      if (!hint) {
+        openPrintDialog();
+        return;
+      }
+      hint.hidden = false;
+    });
+
+    if (confirmButton) {
+      confirmButton.addEventListener('click', openPrintDialog);
+    }
+
+    window.addEventListener('afterprint', () => {
+      if (hint) hint.hidden = true;
+    });
+  }
+
+  // ── Bootstrap ────────────────────────────────────────────────
+  try {
+    const dataEl = document.getElementById('resume-data');
+    if (!dataEl) throw new Error('Missing #resume-data element');
+    const data = JSON.parse(dataEl.textContent);
+    const app  = document.getElementById('app');
+    if (!app) throw new Error('Missing #app element');
+    applyTheme(data.theme);
+    app.innerHTML = renderResume(data);
+    setupPreviewZoom();
+    setupLayoutWarnings();
+    setupPrintExport();
+
+    // Set page title from profile name if available
+    if (data.profile && data.profile.name) {
+      document.title = data.profile.name + ' — Resume';
+    }
+  } catch (err) {
+    console.error('[render.js]', err);
+    const app = document.getElementById('app');
+    if (app) {
+      app.innerHTML = `<div style="padding:40px;color:red;font-family:monospace">
+        <strong>渲染错误</strong><br>${escapeHTML(err.message)}<br>
+        <small>请检查 resume-data 的 JSON 格式是否正确。</small>
+      </div>`;
+    }
+  }
+})();
+
+</script>
+</body>
+</html>

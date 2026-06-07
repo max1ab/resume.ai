@@ -1,0 +1,125 @@
+{
+  "photo": "sample-photo.jpg",
+  "theme": {
+    "headingStyle": "underline",
+    "layout": "single",
+    "color": "classic-blue"
+  },
+  "profile": {
+    "name": "姓名",
+    "role": "目标岗位",
+    "tagline": "这里写 2 行个人简介。"
+  },
+  "sideSections": [
+    {
+      "title": "基本信息",
+      "lines": [
+        "城市 · 学历",
+        "年龄 / 年级 / 状态",
+        "语言或证书",
+        "常用 ID: username"
+      ]
+    },
+    {
+      "title": "联系方式",
+      "lines": [
+        {
+          "text": "yourname@email.com",
+          "url": "mailto:yourname@email.com"
+        },
+        "Phone: 12345678900",
+        {
+          "text": "github.com/yourname",
+          "url": "https://github.com/yourname"
+        },
+        {
+          "text": "your-website.com",
+          "url": "https://your-website.com"
+        }
+      ]
+    },
+    {
+      "title": "核心技能",
+      "lines": [
+        "技能 A / 技能 B",
+        "技能 C / 技能 D",
+        "工具 A / 工具 B"
+      ]
+    }
+  ],
+  "mainSections": [
+    {
+      "title": "关于我",
+      "type": "body",
+      "paragraphs": [
+        "这里写纯文本段落。适合放个人介绍、职业方向、能力概述。段落之间可以用空行或手动加一点间距。",
+        "第二段可以补充你解决问题的方法、项目偏好、沟通风格或长期目标。"
+      ]
+    },
+    {
+      "title": "代表项目",
+      "type": "projects",
+      "items": [
+        {
+          "title": "项目名称",
+          "description": "这里写项目描述。建议说明项目目标、你的职责、核心技术、结果或影响。",
+          "tags": [
+            "标签一",
+            "标签二",
+            "标签三"
+          ],
+          "metaLabel": "备注",
+          "metaValue": "https://example.com"
+        },
+        {
+          "title": "另一个项目",
+          "description": "适合展示可视化作品、界面截图、数据看板、设计稿或其他需要图片辅助说明的成果。",
+          "tags": [
+            "工具",
+            "方向"
+          ],
+          "image": "sample-project.svg"
+        }
+      ]
+    },
+    {
+      "title": "经历",
+      "type": "experience",
+      "items": [
+        {
+          "title": "公司或角色名称",
+          "date": "2024.01 — 至今",
+          "summary": "这里写一行经历摘要。右侧适合放时间，正文适合放职责范围。",
+          "bullets": [
+            "写具体行动和结果。",
+            "写你负责的模块、流程或产出。",
+            "写可量化影响或可验证成果。"
+          ]
+        },
+        {
+          "title": "另一段经历",
+          "date": "2022.01 — 2023.12",
+          "summary": "这里写经历摘要。",
+          "bullets": [
+            "要点一。",
+            "要点二。"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "教育背景",
+      "type": "experience",
+      "items": [
+        {
+          "title": "学校名称 / 专业名称",
+          "date": "开始时间 — 结束时间",
+          "summary": "学历：本科（或硕士）",
+          "bullets": [
+            "GPA、主修课程、奖项荣誉或相关课程项目可放在这里。"
+          ]
+        }
+      ]
+    }
+  ]
+}

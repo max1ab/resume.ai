@@ -5,6 +5,7 @@
 # Generated HTML files (built from JSON via scripts/build.mjs)
 resumes/*.html
 !resumes/sample-resume.html
+!resumes/sample-single.html
 
 # ── Personal resume data & photos ───────────────────────────
 # Keep only the committed sample files; ignore everything else in resumes/
@@ -13,6 +14,8 @@ resumes/*
 !resumes/sample-photo.jpg
 !resumes/sample-project.svg
 !resumes/sample-resume.html
+!resumes/sample-single.json
+!resumes/sample-single.html
 
 # ── Node ────────────────────────────────────────────────────
 node_modules/
