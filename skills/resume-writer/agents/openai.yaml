@@ -1,0 +1,7 @@
+interface:
+  display_name: "Resume Writer"
+  short_description: "Create A4 resume JSON and HTML previews"
+  default_prompt: "Use $resume-writer to create a focused resume JSON and build the HTML preview."
+
+policy:
+  allow_implicit_invocation: true

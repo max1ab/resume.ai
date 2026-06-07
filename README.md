@@ -132,7 +132,7 @@ node scripts/build.mjs --standalone-template
 neutral / classic-blue / academic-red / business-green / creative-orange
 ```
 
-`theme.headingStyle` 默认为 `bar`，可改为 `underline` 使用旧的短横线标题样式。
+`theme.headingStyle` 支持 `bar`、`marker`、`underline`。双栏默认 `bar`，单栏默认 `marker`。
 
 `theme.layout` 可用 `sidebar-left`、`sidebar-right` 或 `single`。
 双栏示例见 `resumes/sample-resume.json`，单栏示例见 `resumes/sample-single.json`。
