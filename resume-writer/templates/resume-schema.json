@@ -180,8 +180,20 @@
                     "summary": { "type": "string", "description": "一行经历摘要" },
                     "bullets": {
                       "type": "array",
-                      "items": { "type": "string" },
-                      "description": "要点列表，对应 tightBullets"
+                      "items": {
+                        "oneOf": [
+                          { "type": "string" },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "text": { "type": "string" },
+                              "url":  { "type": "string" }
+                            },
+                            "required": ["text", "url"]
+                          }
+                        ]
+                      },
+                      "description": "要点列表，对应 tightBullets；支持 { text, url } 链接"
                     }
                   },
                   "required": ["title", "date"]

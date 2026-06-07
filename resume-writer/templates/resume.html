@@ -7,18 +7,18 @@
   <link rel="stylesheet" href="resume.css" />
 </head>
 <body>
-  <div class="preview-toolbar" aria-label="简历预览工具栏">
-    <button type="button" data-print title="导出 PDF">导出 PDF</button>
-    <button type="button" data-zoom="out" title="缩小">−</button>
-    <button type="button" data-zoom="fit" title="适应宽度">适应宽度</button>
-    <span id="zoom-label">100%</span>
-    <button type="button" data-zoom="in" title="放大">+</button>
-    <span id="layout-warning" class="layout-warning" hidden></span>
-  </div>
-  <div id="print-hint" class="print-hint" hidden>
-    <strong>保存 PDF 设置</strong>
-    <span>纸张 A4 · 边距无 · 背景图形开启 · 页眉页脚关闭</span>
-    <button type="button" data-print-confirm>继续打开打印</button>
+  <div class="preview-toolbar-shell">
+    <div class="preview-toolbar" aria-label="简历预览工具栏">
+      <span class="print-btn-wrap">
+        <button type="button" data-print aria-describedby="print-hint">导出 PDF</button>
+        <span id="print-hint" class="print-tooltip" role="tooltip">保存 PDF：A4 · 无边距 · 开启背景图形 · 关闭页眉页脚</span>
+      </span>
+      <button type="button" data-zoom="out" title="缩小" aria-label="缩小">−</button>
+      <button type="button" data-zoom="fit" title="适应宽度">适应<span class="toolbar-fit-suffix">宽度</span></button>
+      <span id="zoom-label">100%</span>
+      <button type="button" data-zoom="in" title="放大" aria-label="放大">+</button>
+      <span id="layout-warning" class="layout-warning" hidden></span>
+    </div>
   </div>
   <div id="app"></div>
   <script type="application/json" id="resume-data">__RESUME_DATA__</script>

@@ -197,7 +197,12 @@
     const summary = escapeHTML(item.summary || '');
     const bullets = Array.isArray(item.bullets) ? item.bullets : [];
     const bulletHTML = bullets.length
-      ? `<ul class="dated-bullets">${bullets.map(b => `<li>${escapeHTML(b)}</li>`).join('')}</ul>`
+      ? `<ul class="dated-bullets">${bullets.map(b => {
+          const content = (b && typeof b === 'object' && b.url)
+            ? renderLink(b.url, b.text)
+            : escapeHTML(String(b));
+          return `<li>${content}</li>`;
+        }).join('')}</ul>`
       : '';
     return `
 <div class="dated-item">
@@ -428,6 +433,16 @@
       label.textContent = `${Math.round(scale * 100)}%`;
     }
 
+    function zoomBy(delta) {
+      autoFit = false;
+      applyScale(scale + delta);
+    }
+
+    function zoomByFactor(factor) {
+      autoFit = false;
+      applyScale(scale * factor);
+    }
+
     function fitToWidth() {
       const availableWidth = Math.max(320, window.innerWidth - 40);
       const baseWidth = page.offsetWidth || 1;
@@ -443,8 +458,52 @@
           return;
         }
         autoFit = false;
-        applyScale(scale + (action === 'in' ? step : -step));
+        zoomBy(action === 'in' ? step : -step);
       });
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (!(event.metaKey || event.ctrlKey) || event.altKey) return;
+      if (event.key === '=' || event.key === '+' || event.code === 'Equal') {
+        event.preventDefault();
+        zoomBy(step);
+      } else if (event.key === '-' || event.key === '_' || event.code === 'Minus') {
+        event.preventDefault();
+        zoomBy(-step);
+      }
+    });
+
+    document.addEventListener('wheel', (event) => {
+      if (!event.ctrlKey) return;
+      event.preventDefault();
+      zoomByFactor(Math.exp(-event.deltaY * 0.008));
+    }, { passive: false });
+
+    let pinchDistance = null;
+
+    function getPinchDistance(touches) {
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.hypot(dx, dy);
+    }
+
+    document.addEventListener('touchstart', (event) => {
+      if (event.touches.length === 2) {
+        pinchDistance = getPinchDistance(event.touches);
+        autoFit = false;
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchmove', (event) => {
+      if (event.touches.length !== 2 || pinchDistance == null) return;
+      event.preventDefault();
+      const distance = getPinchDistance(event.touches);
+      zoomByFactor(distance / pinchDistance);
+      pinchDistance = distance;
+    }, { passive: false });
+
+    document.addEventListener('touchend', (event) => {
+      if (event.touches.length < 2) pinchDistance = null;
     });
 
     window.addEventListener('resize', () => {
@@ -496,32 +555,8 @@
   // ── Print export ────────────────────────────────────────────
   function setupPrintExport() {
     const printButton = document.querySelector('[data-print]');
-    const confirmButton = document.querySelector('[data-print-confirm]');
-    const hint = document.getElementById('print-hint');
     if (!printButton) return;
-
-    function openPrintDialog() {
-      if (hint) {
-        hint.hidden = true;
-      }
-      window.print();
-    }
-
-    printButton.addEventListener('click', () => {
-      if (!hint) {
-        openPrintDialog();
-        return;
-      }
-      hint.hidden = false;
-    });
-
-    if (confirmButton) {
-      confirmButton.addEventListener('click', openPrintDialog);
-    }
-
-    window.addEventListener('afterprint', () => {
-      if (hint) hint.hidden = true;
-    });
+    printButton.addEventListener('click', () => window.print());
   }
 
   // ── Bootstrap ────────────────────────────────────────────────
