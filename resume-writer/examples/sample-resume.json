@@ -1,15 +1,15 @@
 {
-  "photo": "sample-photo.jpg",
+  "photo": "assets/sample-photo.jpg",
   "theme": {
-    "headingStyle": "underline",
-    "layout": "single",
-    "color": "classic-blue"
+    "headingStyle": "bar"
   },
+
   "profile": {
     "name": "姓名",
     "role": "目标岗位",
     "tagline": "这里写 2 行个人简介。"
   },
+
   "sideSections": [
     {
       "title": "基本信息",
@@ -23,19 +23,10 @@
     {
       "title": "联系方式",
       "lines": [
-        {
-          "text": "yourname@email.com",
-          "url": "mailto:yourname@email.com"
-        },
+        { "text": "yourname@email.com", "url": "mailto:yourname@email.com" },
         "Phone: 12345678900",
-        {
-          "text": "github.com/yourname",
-          "url": "https://github.com/yourname"
-        },
-        {
-          "text": "your-website.com",
-          "url": "https://your-website.com"
-        }
+        { "text": "github.com/yourname",  "url": "https://github.com/yourname"  },
+        { "text": "your-website.com",     "url": "https://your-website.com"     }
       ]
     },
     {
@@ -45,8 +36,23 @@
         "技能 C / 技能 D",
         "工具 A / 工具 B"
       ]
+    },
+    {
+      "title": "教育背景",
+      "lines": [
+        "学校名称",
+        "专业名称",
+        "开始时间 — 结束时间"
+      ]
+    },
+    {
+      "title": "补充信息",
+      "lines": [
+        "这里可以写兴趣方向、语言能力、奖项荣誉，或其他适合放在左栏的短内容。"
+      ]
     }
   ],
+
   "mainSections": [
     {
       "title": "关于我",
@@ -63,22 +69,16 @@
         {
           "title": "项目名称",
           "description": "这里写项目描述。建议说明项目目标、你的职责、核心技术、结果或影响。",
-          "tags": [
-            "标签一",
-            "标签二",
-            "标签三"
-          ],
+          "tags": ["标签一", "标签二", "标签三"],
           "metaLabel": "备注",
           "metaValue": "https://example.com"
         },
         {
           "title": "另一个项目",
-          "description": "适合展示可视化作品、界面截图、数据看板、设计稿或其他需要图片辅助说明的成果。",
-          "tags": [
-            "工具",
-            "方向"
-          ],
-          "image": "sample-project.svg"
+          "description": "项目描述可以更长一些，但建议控制在 2–3 行，保证整体版式稳定。",
+          "tags": ["工具", "方向"],
+          "metaLabel": "数据",
+          "metaValue": "100k+"
         }
       ]
     },
@@ -108,16 +108,13 @@
       ]
     },
     {
-      "title": "教育背景",
-      "type": "experience",
+      "title": "作品展示",
+      "type": "projects",
       "items": [
         {
-          "title": "学校名称 / 专业名称",
-          "date": "开始时间 — 结束时间",
-          "summary": "学历：本科（或硕士）",
-          "bullets": [
-            "GPA、主修课程、奖项荣誉或相关课程项目可放在这里。"
-          ]
+          "title": "带图片的项目",
+          "description": "适合展示可视化作品、界面截图、数据看板、设计稿或其他需要图片辅助说明的成果。",
+          "image": "assets/sample-project.svg"
         }
       ]
     }

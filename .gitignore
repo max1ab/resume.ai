@@ -1,21 +1,20 @@
 # macOS
 .DS_Store
 
-# ── HTML build outputs ───────────────────────────────────────
-# Generated HTML files (built from JSON via scripts/build.mjs)
-resumes/*.html
-!resumes/sample-resume.html
-!resumes/sample-single.html
+# ── Showcase examples (repo root) ────────────────────────────
+# Track JSON only; HTML is built locally for preview.
+examples/*.html
 
-# ── Personal resume data & photos ───────────────────────────
-# Keep only the committed sample files; ignore everything else in resumes/
-resumes/*
-!resumes/sample-resume.json
-!resumes/sample-photo.jpg
-!resumes/sample-project.svg
-!resumes/sample-resume.html
-!resumes/sample-single.json
-!resumes/sample-single.html
+# Dev/test fixtures — not part of the public showcase
+examples/preview-*
+examples/frontend-*
+examples/overflow-test.*
+examples/path-test.*
+examples/sample-standalone.*
+examples/*.pdf
+
+# ── Agent usage examples (skill package) ─────────────────────
+resume-writer/examples/*.html
 
 # ── Node ────────────────────────────────────────────────────
 node_modules/

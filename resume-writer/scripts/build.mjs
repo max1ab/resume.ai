@@ -2,21 +2,27 @@
 /**
  * Resume HTML builder
  *
- * Usage:
- *   node scripts/build.mjs resumes/sample-resume.json
- *   node scripts/build.mjs resumes/ai-engineer.json --watch
- *   node scripts/build.mjs --standalone-template
+ * Templates live in the skill package. Resume JSON/HTML paths are relative to
+ * the current working directory (usually the repository root).
  *
- * Produces: resumes/<name>.html  (self-contained, no CDN dependencies)
+ * Usage (from repository root):
+ *   node resume-writer/scripts/build.mjs examples/sample-classic-blue.json
+ *   node resume-writer/scripts/build.mjs examples/sample-classic-blue.json --watch
+ *   node resume-writer/scripts/build.mjs resume-writer/examples/sample-resume.json
+ *   node resume-writer/scripts/build.mjs --standalone-template
+ *
+ * Produces: <input>.html next to the JSON file
  */
 
 import fs   from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT      = path.resolve(__dirname, '..');
-const TEMPLATES = path.join(ROOT, 'templates');
+const __dirname    = path.dirname(fileURLToPath(import.meta.url));
+const PACKAGE_ROOT = path.resolve(__dirname, '..');
+const TEMPLATES    = path.join(PACKAGE_ROOT, 'templates');
+const EXAMPLES     = path.join(PACKAGE_ROOT, 'examples');
+const WORKSPACE    = process.cwd();
 
 // ── Argument parsing ─────────────────────────────────────────
 const args      = process.argv.slice(2);
@@ -30,12 +36,14 @@ if (standaloneTemplateMode) {
 }
 
 if (!jsonArg) {
-  console.error('Usage: node scripts/build.mjs <path-to-resume.json> [--watch]');
-  console.error('       node scripts/build.mjs --standalone-template');
+  console.error('Usage: node resume-writer/scripts/build.mjs <path-to-resume.json> [--watch]');
+  console.error('       node resume-writer/scripts/build.mjs --standalone-template');
   process.exit(1);
 }
 
-const jsonPath = path.resolve(ROOT, jsonArg);
+const jsonPath = path.isAbsolute(jsonArg)
+  ? jsonArg
+  : path.resolve(WORKSPACE, jsonArg);
 
 if (!jsonArg.endsWith('.json')) {
   console.error('Error: input file must have a .json extension');
@@ -54,11 +62,7 @@ function build() {
   try {
     const data = fs.readFileSync(jsonPath, 'utf8');
 
-    // Parse once; validate and use the same object throughout
     const parsed      = JSON.parse(data);
-
-    // Resolve local image paths relative to the output HTML file so <img src>
-    // works when the HTML is opened directly from the resumes/ directory.
     const resolvedData = resolveImagePaths(parsed, jsonPath);
     const embeddedData = JSON.stringify(resolvedData, null, 2)
       .replace(/</g, '\\u003c')
@@ -69,7 +73,7 @@ function build() {
 
     fs.writeFileSync(htmlPath, out, 'utf8');
     const ts = new Date().toLocaleTimeString('zh-CN');
-    console.log(`[${ts}] Built → ${path.relative(ROOT, htmlPath)}`);
+    console.log(`[${ts}] Built → ${path.relative(WORKSPACE, htmlPath)}`);
   } catch (err) {
     console.error(`Build error: ${err.message}`);
     if (!watchMode) process.exit(1);
@@ -81,7 +85,6 @@ function inlineAssets() {
   const css = fs.readFileSync(path.join(TEMPLATES, 'resume.css'), 'utf8');
   const js = fs.readFileSync(path.join(TEMPLATES, 'render.js'), 'utf8');
 
-  // Escape closing tags so inline CSS/JS cannot break out of their containers.
   const safeCss = css.replace(/<\/style>/gi, '<\\/style>');
   const safeJs = js.replace(/<\/script>/gi, '<\\/script>');
 
@@ -99,30 +102,31 @@ function inlineAssets() {
 function buildStandaloneTemplate() {
   const outPath = path.join(TEMPLATES, 'resume-standalone.html');
   fs.writeFileSync(outPath, inlineAssets(), 'utf8');
-  console.log(`Built → ${path.relative(ROOT, outPath)}`);
+  console.log(`Built → ${path.relative(WORKSPACE, outPath)}`);
 }
 
 /**
  * Make local image paths relative to the output HTML file location.
- * JSON may contain paths like "resumes/photo.jpg" (relative to root)
- * or just "photo.jpg" (relative to the JSON file). Remote URLs and missing
- * files are left untouched.
+ * JSON may contain paths relative to cwd, the JSON file, or skill examples/.
  */
 function resolveImagePaths(data, srcJsonPath) {
   const dir = path.dirname(srcJsonPath);
+  const basename = (p) => path.basename(p);
 
   function resolveLocalImagePath(imagePath) {
     if (!imagePath || typeof imagePath !== 'string') return imagePath;
     if (/^(?:https?:|data:|mailto:)/i.test(imagePath)) return imagePath;
 
-    const fromRoot = path.resolve(ROOT, imagePath);
-    const fromJson = path.resolve(dir, imagePath);
-    const absPath = fs.existsSync(fromRoot)
-      ? fromRoot
-      : fs.existsSync(fromJson)
-        ? fromJson
-        : null;
+    const candidates = [
+      path.resolve(WORKSPACE, imagePath),
+      path.resolve(dir, imagePath),
+      path.resolve(EXAMPLES, imagePath),
+      path.resolve(EXAMPLES, 'assets', imagePath),
+      path.resolve(EXAMPLES, basename(imagePath)),
+      path.resolve(EXAMPLES, 'assets', basename(imagePath))
+    ];
 
+    const absPath = candidates.find(candidate => fs.existsSync(candidate)) ?? null;
     return absPath ? path.relative(dir, absPath) : imagePath;
   }
 
@@ -162,12 +166,6 @@ if (watchMode) {
     }, 80);
   };
 
-  // Watch the JSON data file
   fs.watch(jsonPath, (_, filename) => trigger(filename || jsonPath));
-
-  // Watch the templates directory.
-  // Note: { recursive: true } is only supported on macOS and Windows;
-  // on Linux it silently has no effect. Since templates/ is flat (no subdirs)
-  // recursive: false is sufficient and portable.
   fs.watch(TEMPLATES, { recursive: false }, (_, filename) => trigger(filename));
 }
