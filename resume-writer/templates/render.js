@@ -552,6 +552,70 @@
     window.addEventListener('load', checkOverflow);
   }
 
+  // ── Toolbar tooltips (fixed; avoids overflow clipping in Safari) ─
+  function setupToolbarTooltips() {
+    document.querySelectorAll('.toolbar-tooltip').forEach(tooltip => {
+      const id = tooltip.id;
+      const described = document.querySelector(`[aria-describedby="${id}"]`);
+      // Tooltips inside .print-btn-wrap use the wrapper as trigger; others
+      // (e.g. .browser-warning-icon) fall back to the aria owner itself.
+      const trigger = described?.closest('.print-btn-wrap') || described;
+      if (!trigger) return;
+
+      function position() {
+        const triggerRect = trigger.getBoundingClientRect();
+        const toolbar = document.querySelector('.preview-toolbar-shell');
+        const anchorTop = (toolbar
+          ? toolbar.getBoundingClientRect().bottom
+          : triggerRect.bottom) + 8;
+
+        // Center over the trigger button, clamped to viewport edges.
+        const centerX = triggerRect.left + triggerRect.width / 2;
+        const tw = tooltip.offsetWidth;
+        const clamped = tw > 0
+          ? Math.min(Math.max(centerX, tw / 2 + 8), window.innerWidth - tw / 2 - 8)
+          : centerX;
+
+        tooltip.style.left = `${clamped}px`;
+        tooltip.style.top = `${anchorTop}px`;
+        tooltip.style.right = 'auto';
+        tooltip.style.transform = 'translateX(-50%)';
+      }
+
+      function show() {
+        position();
+        tooltip.classList.add('is-visible');
+      }
+
+      function hide() {
+        tooltip.classList.remove('is-visible');
+      }
+
+      trigger.addEventListener('mouseenter', show);
+      trigger.addEventListener('focusin', show);
+      trigger.addEventListener('mouseleave', hide);
+      trigger.addEventListener('focusout', hide);
+      window.addEventListener('resize', () => {
+        if (tooltip.classList.contains('is-visible')) position();
+      });
+    });
+  }
+
+  // ── Browser compatibility hint ──────────────────────────────
+  function isChromiumBased() {
+    const ua = navigator.userAgent;
+    if (/Firefox|FxiOS/i.test(ua)) return false;
+    if (/CriOS|EdgiOS|EdgA|Edg\//i.test(ua)) return true;
+    if (/OPR\/|Brave/i.test(ua)) return true;
+    return /Chrome|Chromium/i.test(ua);
+  }
+
+  function setupBrowserWarning() {
+    const warning = document.getElementById('browser-warning');
+    if (!warning || isChromiumBased()) return;
+    warning.hidden = false;
+  }
+
   // ── Print export ────────────────────────────────────────────
   function setupPrintExport() {
     const printButton = document.querySelector('[data-print]');
@@ -570,6 +634,8 @@
     app.innerHTML = renderResume(data);
     setupPreviewZoom();
     setupLayoutWarnings();
+    setupBrowserWarning();
+    setupToolbarTooltips();
     setupPrintExport();
 
     // Set page title from profile name if available

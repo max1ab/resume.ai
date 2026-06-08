@@ -11,13 +11,17 @@
     <div class="preview-toolbar" aria-label="简历预览工具栏">
       <span class="print-btn-wrap">
         <button type="button" data-print aria-describedby="print-hint">导出 PDF</button>
-        <span id="print-hint" class="print-tooltip" role="tooltip">保存 PDF：A4 · 无边距 · 开启背景图形 · 关闭页眉页脚</span>
+        <span id="print-hint" class="toolbar-tooltip print-tooltip" role="tooltip">保存 PDF：A4 · 无边距 · 开启背景图形 · 关闭页眉页脚</span>
       </span>
       <button type="button" data-zoom="out" title="缩小" aria-label="缩小">−</button>
       <button type="button" data-zoom="fit" title="适应宽度">适应<span class="toolbar-fit-suffix">宽度</span></button>
       <span id="zoom-label">100%</span>
       <button type="button" data-zoom="in" title="放大" aria-label="放大">+</button>
       <span id="layout-warning" class="layout-warning" hidden></span>
+      <span class="browser-warning-wrap" id="browser-warning" hidden>
+        <span class="browser-warning-icon" tabindex="0" role="img" aria-label="浏览器兼容性提示" aria-describedby="browser-warning-tip">⚠️</span>
+        <span id="browser-warning-tip" class="toolbar-tooltip browser-tooltip" role="tooltip">建议使用 Chrome 或 Edge 导出 PDF；Safari/Firefox 打印预览可能异常</span>
+      </span>
     </div>
   </div>
   <div id="app"></div>

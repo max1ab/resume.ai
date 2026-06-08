@@ -609,7 +609,7 @@ a:hover {
 
   .preview-toolbar,
   .preview-toolbar-shell,
-  .print-tooltip {
+  .toolbar-tooltip {
     display: none;
   }
 
@@ -658,6 +658,10 @@ a:hover {
     display: none;
   }
 
+  .browser-warning-wrap {
+    display: none !important;
+  }
+
   .a4-limit-line {
     display: none;
   }
@@ -688,8 +692,6 @@ a:hover {
     transform: translateX(-50%);
     overflow-x: auto;
     overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
   }
 
   .preview-toolbar-shell::-webkit-scrollbar {
@@ -745,13 +747,11 @@ a:hover {
     display: inline-flex;
   }
 
-  .print-tooltip {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 50%;
-    z-index: 20;
+  .toolbar-tooltip {
+    position: fixed;
+    z-index: 100;
     width: max-content;
-    max-width: 280px;
+    max-width: min(280px, calc(100vw - 16px));
     padding: 8px 10px;
     border: 1px solid rgba(0,0,0,0.12);
     border-radius: 6px;
@@ -763,15 +763,12 @@ a:hover {
     pointer-events: none;
     opacity: 0;
     visibility: hidden;
-    transform: translateX(-50%) translateY(-2px);
-    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+    transition: opacity 0.15s ease, visibility 0.15s ease;
   }
 
-  .print-btn-wrap:hover .print-tooltip,
-  .print-btn-wrap:focus-within .print-tooltip {
+  .toolbar-tooltip.is-visible {
     opacity: 1;
     visibility: visible;
-    transform: translateX(-50%) translateY(0);
   }
 
   #zoom-label {
@@ -798,6 +795,32 @@ a:hover {
 
   .layout-warning[hidden] {
     display: none;
+  }
+
+  .browser-warning-wrap {
+    position: relative;
+    display: inline-flex;
+    z-index: 30;
+    border-left: 1px solid var(--linegray);
+    padding-left: 6px;
+  }
+
+  .browser-warning-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    font-size: 15px;
+    line-height: 1;
+    cursor: help;
+    user-select: none;
+    outline: none;
+  }
+
+  .browser-warning-icon:focus-visible {
+    border-radius: 4px;
+    box-shadow: 0 0 0 2px rgba(180, 83, 9, 0.35);
   }
 
   .preview-shell {

@@ -616,7 +616,7 @@ a:hover {
 
   .preview-toolbar,
   .preview-toolbar-shell,
-  .print-tooltip {
+  .toolbar-tooltip {
     display: none;
   }
 
@@ -665,6 +665,10 @@ a:hover {
     display: none;
   }
 
+  .browser-warning-wrap {
+    display: none !important;
+  }
+
   .a4-limit-line {
     display: none;
   }
@@ -695,8 +699,6 @@ a:hover {
     transform: translateX(-50%);
     overflow-x: auto;
     overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
   }
 
   .preview-toolbar-shell::-webkit-scrollbar {
@@ -752,13 +754,11 @@ a:hover {
     display: inline-flex;
   }
 
-  .print-tooltip {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 50%;
-    z-index: 20;
+  .toolbar-tooltip {
+    position: fixed;
+    z-index: 100;
     width: max-content;
-    max-width: 280px;
+    max-width: min(280px, calc(100vw - 16px));
     padding: 8px 10px;
     border: 1px solid rgba(0,0,0,0.12);
     border-radius: 6px;
@@ -770,15 +770,12 @@ a:hover {
     pointer-events: none;
     opacity: 0;
     visibility: hidden;
-    transform: translateX(-50%) translateY(-2px);
-    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+    transition: opacity 0.15s ease, visibility 0.15s ease;
   }
 
-  .print-btn-wrap:hover .print-tooltip,
-  .print-btn-wrap:focus-within .print-tooltip {
+  .toolbar-tooltip.is-visible {
     opacity: 1;
     visibility: visible;
-    transform: translateX(-50%) translateY(0);
   }
 
   #zoom-label {
@@ -805,6 +802,32 @@ a:hover {
 
   .layout-warning[hidden] {
     display: none;
+  }
+
+  .browser-warning-wrap {
+    position: relative;
+    display: inline-flex;
+    z-index: 30;
+    border-left: 1px solid var(--linegray);
+    padding-left: 6px;
+  }
+
+  .browser-warning-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    font-size: 15px;
+    line-height: 1;
+    cursor: help;
+    user-select: none;
+    outline: none;
+  }
+
+  .browser-warning-icon:focus-visible {
+    border-radius: 4px;
+    box-shadow: 0 0 0 2px rgba(180, 83, 9, 0.35);
   }
 
   .preview-shell {
@@ -855,13 +878,17 @@ a:hover {
     <div class="preview-toolbar" aria-label="简历预览工具栏">
       <span class="print-btn-wrap">
         <button type="button" data-print aria-describedby="print-hint">导出 PDF</button>
-        <span id="print-hint" class="print-tooltip" role="tooltip">保存 PDF：A4 · 无边距 · 开启背景图形 · 关闭页眉页脚</span>
+        <span id="print-hint" class="toolbar-tooltip print-tooltip" role="tooltip">保存 PDF：A4 · 无边距 · 开启背景图形 · 关闭页眉页脚</span>
       </span>
       <button type="button" data-zoom="out" title="缩小" aria-label="缩小">−</button>
       <button type="button" data-zoom="fit" title="适应宽度">适应<span class="toolbar-fit-suffix">宽度</span></button>
       <span id="zoom-label">100%</span>
       <button type="button" data-zoom="in" title="放大" aria-label="放大">+</button>
       <span id="layout-warning" class="layout-warning" hidden></span>
+      <span class="browser-warning-wrap" id="browser-warning" hidden>
+        <span class="browser-warning-icon" tabindex="0" role="img" aria-label="浏览器兼容性提示" aria-describedby="browser-warning-tip">⚠️</span>
+        <span id="browser-warning-tip" class="toolbar-tooltip browser-tooltip" role="tooltip">建议使用 Chrome 或 Edge 导出 PDF；Safari/Firefox 打印预览可能异常</span>
+      </span>
     </div>
   </div>
   <div id="app"></div>
@@ -1421,6 +1448,70 @@ a:hover {
     window.addEventListener('load', checkOverflow);
   }
 
+  // ── Toolbar tooltips (fixed; avoids overflow clipping in Safari) ─
+  function setupToolbarTooltips() {
+    document.querySelectorAll('.toolbar-tooltip').forEach(tooltip => {
+      const id = tooltip.id;
+      const described = document.querySelector(`[aria-describedby="${id}"]`);
+      // Tooltips inside .print-btn-wrap use the wrapper as trigger; others
+      // (e.g. .browser-warning-icon) fall back to the aria owner itself.
+      const trigger = described?.closest('.print-btn-wrap') || described;
+      if (!trigger) return;
+
+      function position() {
+        const triggerRect = trigger.getBoundingClientRect();
+        const toolbar = document.querySelector('.preview-toolbar-shell');
+        const anchorTop = (toolbar
+          ? toolbar.getBoundingClientRect().bottom
+          : triggerRect.bottom) + 8;
+
+        // Center over the trigger button, clamped to viewport edges.
+        const centerX = triggerRect.left + triggerRect.width / 2;
+        const tw = tooltip.offsetWidth;
+        const clamped = tw > 0
+          ? Math.min(Math.max(centerX, tw / 2 + 8), window.innerWidth - tw / 2 - 8)
+          : centerX;
+
+        tooltip.style.left = `${clamped}px`;
+        tooltip.style.top = `${anchorTop}px`;
+        tooltip.style.right = 'auto';
+        tooltip.style.transform = 'translateX(-50%)';
+      }
+
+      function show() {
+        position();
+        tooltip.classList.add('is-visible');
+      }
+
+      function hide() {
+        tooltip.classList.remove('is-visible');
+      }
+
+      trigger.addEventListener('mouseenter', show);
+      trigger.addEventListener('focusin', show);
+      trigger.addEventListener('mouseleave', hide);
+      trigger.addEventListener('focusout', hide);
+      window.addEventListener('resize', () => {
+        if (tooltip.classList.contains('is-visible')) position();
+      });
+    });
+  }
+
+  // ── Browser compatibility hint ──────────────────────────────
+  function isChromiumBased() {
+    const ua = navigator.userAgent;
+    if (/Firefox|FxiOS/i.test(ua)) return false;
+    if (/CriOS|EdgiOS|EdgA|Edg\//i.test(ua)) return true;
+    if (/OPR\/|Brave/i.test(ua)) return true;
+    return /Chrome|Chromium/i.test(ua);
+  }
+
+  function setupBrowserWarning() {
+    const warning = document.getElementById('browser-warning');
+    if (!warning || isChromiumBased()) return;
+    warning.hidden = false;
+  }
+
   // ── Print export ────────────────────────────────────────────
   function setupPrintExport() {
     const printButton = document.querySelector('[data-print]');
@@ -1439,6 +1530,8 @@ a:hover {
     app.innerHTML = renderResume(data);
     setupPreviewZoom();
     setupLayoutWarnings();
+    setupBrowserWarning();
+    setupToolbarTooltips();
     setupPrintExport();
 
     // Set page title from profile name if available

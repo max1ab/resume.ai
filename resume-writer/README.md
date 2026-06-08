@@ -41,6 +41,16 @@ node resume-writer/scripts/build.mjs examples/sample-classic-blue.json
 open examples/sample-classic-blue.html
 ```
 
+## PDF 导出
+
+预览页点击 **导出 PDF**，在浏览器打印对话框中选择「存储为 PDF」。
+
+- **推荐 Chrome 或 Edge**（Chromium 内核）：打印预览与最终 PDF 一致。
+- **Safari**：打印预览可能上移或出现细线，但最终 PDF 通常正常；若效果不理想，请换 Chrome。
+- 纸张 **A4**、边距 **无**、勾选 **打印背景**、关闭 **页眉页脚**。
+
+非 Chromium 浏览器打开预览时，顶栏右侧会显示提示。
+
 ## 对 Agent 怎么说
 
 ```text

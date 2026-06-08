@@ -72,3 +72,4 @@ Mention:
 - the generated HTML file path
 - whether the build succeeded
 - that the page's `导出 PDF` button opens the browser PDF export flow
+- recommend **Chrome or Edge** for PDF export; Safari print preview can be misleading even when the saved PDF is fine
