@@ -22,7 +22,15 @@ resume-writer/
 ## 安装
 
 ```bash
-cp -R resume-writer ~/.cursor/skills/resume-writer
+npx skills add max1ab/resume.ai
+```
+
+手动安装：
+
+```bash
+cp -R resume-writer ~/.cursor/skills/resume-writer   # Cursor
+cp -R resume-writer ~/.claude/skills/resume-writer   # Claude Code
+cp -R resume-writer ~/.codex/skills/resume-writer     # Codex
 ```
 
 ## 快速开始

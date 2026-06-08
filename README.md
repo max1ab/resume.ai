@@ -35,13 +35,25 @@ node resume-writer/scripts/build.mjs resume-writer/examples/sample-resume.json
 open resume-writer/examples/sample-resume.html
 ```
 
-## 安装为 Cursor Skill
+## 安装 Agent Skill
 
 ```bash
-cp -R resume-writer ~/.cursor/skills/resume-writer
+npx skills add max1ab/resume.ai
+```
+
+手动安装：
+
+```bash
+cp -R resume-writer ~/.cursor/skills/resume-writer   # Cursor
+cp -R resume-writer ~/.claude/skills/resume-writer   # Claude Code
+cp -R resume-writer ~/.codex/skills/resume-writer     # Codex
 ```
 
 在用户项目里自行创建工作目录存放简历 JSON。
+
+## 发布
+
+Skill 包目录为 `resume-writer/`。正式版本见 GitHub Releases（`v1.0.0` 起）。
 
 ## 文档
 
