@@ -555,6 +555,11 @@
   // ── Toolbar tooltips (fixed; avoids overflow clipping in Safari) ─
   function setupToolbarTooltips() {
     document.querySelectorAll('.toolbar-tooltip').forEach(tooltip => {
+      // .preview-toolbar-shell has transform:translateX(-50%), which makes it
+      // the containing block for position:fixed children. Moving each tooltip
+      // to document.body restores normal viewport-relative fixed positioning.
+      document.body.appendChild(tooltip);
+
       const id = tooltip.id;
       const described = document.querySelector(`[aria-describedby="${id}"]`);
       // Tooltips inside .print-btn-wrap use the wrapper as trigger; others

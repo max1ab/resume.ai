@@ -805,6 +805,14 @@ a:hover {
     padding-left: 6px;
   }
 
+  /* Explicit rule needed: .browser-warning-wrap's display:inline-flex has the
+     same specificity as the UA-sheet's [hidden]{display:none} and wins because
+     it appears later in the cascade. This selector's higher specificity (0,2,0)
+     ensures the element stays hidden when JS leaves the hidden attribute set. */
+  .browser-warning-wrap[hidden] {
+    display: none;
+  }
+
   .browser-warning-icon {
     display: inline-flex;
     align-items: center;
