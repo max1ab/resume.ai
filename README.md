@@ -2,7 +2,7 @@
 
 > AI 驱动的简历生成器。和你的 Agent 聊出来一份专业简历。
 
-![Resume Writer](cover.png)
+<img src="cover.png" alt="Resume Writer" width="60%">
 
 ## 一句话介绍
 
